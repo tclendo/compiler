@@ -1,0 +1,16 @@
+C:\Users\troyc\Documents\GitHub\compiler\fc\bin\Debug\net5.0\fc.exe
+C:\Users\troyc\Documents\GitHub\compiler\fc\bin\Debug\net5.0\fc.deps.json
+C:\Users\troyc\Documents\GitHub\compiler\fc\bin\Debug\net5.0\fc.runtimeconfig.json
+C:\Users\troyc\Documents\GitHub\compiler\fc\bin\Debug\net5.0\fc.runtimeconfig.dev.json
+C:\Users\troyc\Documents\GitHub\compiler\fc\bin\Debug\net5.0\fc.dll
+C:\Users\troyc\Documents\GitHub\compiler\fc\bin\Debug\net5.0\ref\fc.dll
+C:\Users\troyc\Documents\GitHub\compiler\fc\bin\Debug\net5.0\fc.pdb
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\fc.csprojAssemblyReference.cache
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\fc.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\fc.AssemblyInfoInputs.cache
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\fc.AssemblyInfo.cs
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\fc.csproj.CoreCompileInputs.cache
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\fc.dll
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\ref\fc.dll
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\fc.pdb
+C:\Users\troyc\Documents\GitHub\compiler\fc\obj\Debug\net5.0\fc.genruntimeconfig.cache

@@ -1,2 +1,3 @@
 # compiler
-Repo where I write a compiler from scratch
+
+Repo where I write a compiler from scratch.

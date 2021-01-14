@@ -4,6 +4,14 @@ namespace Forte.CodeAnalysis
 {
     sealed class BinaryExpressionSyntax : ExpressionSyntax {
 
+        /*
+            BinaryExpressionSyntax
+
+            This is a specified syntax ExpressionSyntax node class that contains information
+            for binary expressions (i.e. a + b). Contains the left and right operands, as well
+            as the operatorToken.
+        */
+
         public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right) {
 
             Left = left;

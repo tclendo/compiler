@@ -1,46 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Forte.CodeAnalysis;
 
 namespace Forte
 {
-    // 1 + 2 * 3
-    // 
-    //
-    //    +
-    //   / \  
-    //  1   *
-    //     / \
-    //    2    3
+    class Program {
 
-    class Program
-    {
-        static void Main(string[] args)
-        {
+        /*
+            Our program class
+
+            This program runs our REPL for our Forte language compiler.
+        */
+
+        static void Main(string[] args) {
+
             bool showTree = false;
 
             while (true) {
                 Console.Write("$ ");
                 var line = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(line)) {
-                    return;
-                }
 
                 if (line == "$showTree") {
 
                     showTree = !showTree;
                     Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
                     continue;
-
+                    
                 } else if (line == "$cls") {
 
                     Console.Clear();
                     continue;
-                }
 
-                var syntaxTree = SyntaxTree.Parse(line);
+                } else if (line == "exit") {
+
+                    return;
+                
+                } else if (string.IsNullOrWhiteSpace(line)) {
+
+                    continue;
+                } 
+
+                var syntaxTree = SyntaxTree.ParseTree(line);
 
                 if (showTree) {
 

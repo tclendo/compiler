@@ -4,9 +4,15 @@ using System.Linq;
 namespace Forte.CodeAnalysis
 {
     class SyntaxToken : SyntaxNode {
+        
+        /*
+            Our syntax token class
 
-        public SyntaxToken(SyntaxKind kind, int position, string text, object value)
-        {
+            Stores data from input text into tokens.
+        */
+        
+        public SyntaxToken(SyntaxKind kind, int position, string text, object value) {
+
             Kind = kind;
             Position = position;
             Text = text;
@@ -19,7 +25,6 @@ namespace Forte.CodeAnalysis
         public object Value { get; }
 
         public override IEnumerable<SyntaxNode> GetChildren() {
-
             return Enumerable.Empty<SyntaxNode>();
         }
     }

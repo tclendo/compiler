@@ -4,6 +4,12 @@ namespace Forte.CodeAnalysis
 {
     sealed class NumberExpressionSyntax : ExpressionSyntax {
 
+        /*
+            NumberExpressionSyntax
+
+            A specified syntax expression node for a number token.
+        */
+
         public NumberExpressionSyntax(SyntaxToken numberToken) {
 
             NumberToken = numberToken;

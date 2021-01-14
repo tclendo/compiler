@@ -5,7 +5,11 @@ namespace Forte.CodeAnalysis
     class Lexer {
 
         /*
-        Lexer class
+            Our lexer class
+
+            Contains functions that assist in tokenizing user input
+
+            Read text -> Create tokens
         */
 
         private readonly string _text;
@@ -13,13 +17,28 @@ namespace Forte.CodeAnalysis
         private List<string> _diagnostics = new List<string>();
 
         public Lexer(string text) {
+            
+            /*
+                Lexer constructor
 
+                sets the instance variable _text with input text
+
+            */
+            
             _text = text;
         }
 
         public IEnumerable<string> Diagnostics => _diagnostics;
 
         private char Current {
+
+            /*
+
+                Current
+
+                returns the _text character at the current _position
+                if we've exceeded the text length, return '\0'.
+            */
 
             get {
 
@@ -32,22 +51,39 @@ namespace Forte.CodeAnalysis
 
         private void Next() {
 
+            /*
+                Next()
+
+                Increses the index we use to reference our _text.
+            */
+
             _position++;
         }
 
         public SyntaxToken NextToken() {
 
-            // <numbers>
-            //  = - * / () TODO ^ %
-            // <whitespace>
+            /*
+                NextToken
 
+                Identifies tokens and returns them.
+
+                Current working tokens:
+                <numbers>
+                = - * / () TODO ^ %
+                <whitespace>
+            */
+
+            // if we've reached the end of the text, return "\0"
             if (_position >= _text.Length) {
 
+                // return an end of file token
                 return new SyntaxToken(SyntaxKind.EndOfFileToken, _position, "\0", null);
             }
 
+            // check if the current character is a number
             if (char.IsDigit(Current)) {
 
+                // starting digit of the number
                 var start = _position;
 
                 while (char.IsDigit(Current)) {
@@ -55,18 +91,24 @@ namespace Forte.CodeAnalysis
                     Next();
                 }
 
+                // at the end of the previous while loop, we should have the start and end digit
                 var length = _position - start;
                 var text = _text.Substring(start, length);
+
+                // try to convert the string into an int, add errors if it can't be done
                 if (!int.TryParse(text, out var value)) {
 
                     _diagnostics.Add($"The number {_text} isn't valid Int32");
                 }
 
+                // return a number token
                 return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
             }
 
+            // check if the current character is a white space
             if (char.IsWhiteSpace(Current)) {
 
+                // starting position of whitespace (in case multiple)
                 var start = _position;
 
                 while (char.IsWhiteSpace(Current)) {
@@ -74,26 +116,42 @@ namespace Forte.CodeAnalysis
                     Next();
                 }
 
+                // get the length of the whitespace block
                 var length = _position - start;
                 var text = _text.Substring(start, length);
 
+                // return a whitespace token
                 return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
             }
 
+            // Artithmetic operators
+
+            // generate token for addition
             if (Current == '+') {      
                 return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
-            } else if (Current == '-') {      
+            } 
+            // generate token for subtraction
+            else if (Current == '-') {      
                 return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
-            } else if (Current == '*') {      
+            } 
+            // generate token for multiplication
+            else if (Current == '*') {      
                 return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
-            } else if (Current == '/') {      
+            } 
+            // generate token for division
+            else if (Current == '/') {      
                 return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
-            } else if (Current == '(') {      
+            } 
+            // generate token for open parenthesis
+            else if (Current == '(') {      
                 return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
-            } else if (Current == ')') {      
+            } 
+            // generate token for closed parenthesis
+            else if (Current == ')') {      
                 return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
-            } else {
-
+            } 
+            // generate token for bad character input, and add to error diagnostics
+            else {
                 _diagnostics.Add($"ERROR: bad character input: '{Current}'");
                 return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);
             }

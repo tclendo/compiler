@@ -2,6 +2,11 @@ namespace Forte.CodeAnalysis
 {
     enum SyntaxKind {
 
+        /*
+            Represents the various tokens that the lexer
+            can identify.
+        */
+
         WhitespaceToken,
         NumberToken,
         PlusToken,
@@ -12,6 +17,8 @@ namespace Forte.CodeAnalysis
         CloseParenthesisToken,
         BadToken,
         EndOfFileToken,
+
+        // expressions
         NumberExpression,
         BinaryExpression,
         ParenthesizedExpressionSyntax

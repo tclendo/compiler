@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Forte.CodeAnalysis
 {
-    class Parser {
+    internal sealed class Parser {
 
         /*
             Our parser class
@@ -34,7 +34,7 @@ namespace Forte.CodeAnalysis
             do {
 
                 // get the next token from our lexer
-                token = lexer.NextToken();
+                token = lexer.Lex();
 
                 // as long as the token is good, add it to our tokens list
                 if (token.Kind != SyntaxKind.WhitespaceToken &&
@@ -75,10 +75,10 @@ namespace Forte.CodeAnalysis
 
         private SyntaxToken Current => Peek(0);
 
-        private SyntaxToken NextToken() {
+        private SyntaxToken Lex() {
 
             /*
-                NextToken
+                Lex
 
                 Increase the position of 
             */
@@ -88,17 +88,17 @@ namespace Forte.CodeAnalysis
             return current;
         }
 
-        private SyntaxToken Match(SyntaxKind kind) {
+        private SyntaxToken MatchToken(SyntaxKind kind) {
 
             /*
-                Match
+                MatchToken
 
                 Check to see if the current token matches the input token
             */
 
             if (Current.Kind == kind) {
 
-                return NextToken();
+                return Lex();
             }
 
             // add an error message to diagnostics if it's a different token than expected
@@ -106,16 +106,6 @@ namespace Forte.CodeAnalysis
             
             // return 
             return new SyntaxToken(kind, Current.Position, null, null);
-        }
-
-        private ExpressionSyntax ParseExpression() {
-
-            /*
-                ParseExpression
-
-                Helper function for ParsePrimaryExpression
-            */
-            return ParseTerm();
         }
 
         public SyntaxTree Parse() {
@@ -132,9 +122,19 @@ namespace Forte.CodeAnalysis
                 Returns a SyntaxTree
             */
 
-            var expression = ParseTerm();
-            var endOfFileToken = Match(SyntaxKind.EndOfFileToken);
+            var expression = ParseExpression();
+            var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(_diagnostics, expression, endOfFileToken);
+        }
+
+        private ExpressionSyntax ParseExpression() {
+
+            /*
+                ParseExpression
+
+                Helper function for ParsePrimaryExpression
+            */
+            return ParseTerm();
         }
         
         private ExpressionSyntax ParseTerm() {
@@ -157,7 +157,7 @@ namespace Forte.CodeAnalysis
             while (Current.Kind == SyntaxKind.PlusToken ||
                 Current.Kind == SyntaxKind.MinusToken) 
             {
-                var operatorToken = NextToken();
+                var operatorToken = Lex();
                 var right = ParseFactor();
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
@@ -186,7 +186,7 @@ namespace Forte.CodeAnalysis
             while (Current.Kind == SyntaxKind.StarToken ||
                 Current.Kind == SyntaxKind.SlashToken) 
             {
-                var operatorToken = NextToken();
+                var operatorToken = Lex();
                 var right = ParsePrimaryExpression();
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
@@ -202,20 +202,20 @@ namespace Forte.CodeAnalysis
                 Checks if the current kind has parenthesis, and then creates a
                 left/expression/right syntaxnode within the parenthesis semi-recursively.
 
-                Otherwise, it should match a number input, since we have gone through
+                Otherwise, it should MatchToken a number input, since we have gone through
                 ParseTerm, and ParseFactor for operands, otherwise it will add to
                 diagnostics that it expected a number.
             */
 
             if (Current.Kind == SyntaxKind.OpenParenthesisToken) {
 
-                var left = NextToken();
+                var left = Lex();
                 var expression = ParseExpression();
-                var right = Match(SyntaxKind.CloseParenthesisToken);
+                var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                 return new ParenthesizedExpressionSyntax(left, expression, right);
             }
-            var numberToken = Match(SyntaxKind.NumberToken);
-            return new NumberExpressionSyntax(numberToken);
+            var literalToken = MatchToken(SyntaxKind.LiteralToken);
+            return new LiteralExpressionSyntax(literalToken);
         }
     }
 }

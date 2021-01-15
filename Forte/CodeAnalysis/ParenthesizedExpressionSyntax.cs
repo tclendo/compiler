@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Forte.CodeAnalysis
 {
-    sealed class ParenthesizedExpressionSyntax : ExpressionSyntax {
+    public sealed class ParenthesizedExpressionSyntax : ExpressionSyntax {
 
         /*
             ParenthesizedExpressionSyntax

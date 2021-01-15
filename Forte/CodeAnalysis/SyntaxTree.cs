@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Forte.CodeAnalysis
 {
-    sealed class SyntaxTree {
+    public sealed class SyntaxTree {
 
         /*
             Our syntax tree class

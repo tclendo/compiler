@@ -2,7 +2,7 @@ using System;
 
 namespace Forte.CodeAnalysis
 {
-    class Evaluator {
+    public sealed class Evaluator {
 
         /*
             Our Evaluator class
@@ -42,15 +42,15 @@ namespace Forte.CodeAnalysis
 
                 Returns an integer by recursively operating on nodes of the parse tree.
 
-                NumberExpressionSyntax
+                LiteralExpressionSyntax
                 BinaryExpressionSyntax
                 ParenthesizedExpressionSyntax
             */
 
             // if the current node is just a number, return the integer value of it
-            if (node is NumberExpressionSyntax n) {
+            if (node is LiteralExpressionSyntax n) {
 
-                return (int) n.NumberToken.Value;
+                return (int) n.LiteralToken.Value;
             }
 
             // if the node is a binary expression syntax node, recursively evaluate the left and right operands

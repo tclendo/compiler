@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Forte.CodeAnalysis
 {
-    class SyntaxToken : SyntaxNode {
+    public class SyntaxToken : SyntaxNode {
         
         /*
             Our syntax token class

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Forte.CodeAnalysis
 {
-    abstract class SyntaxNode {
+    public abstract class SyntaxNode {
 
         /*
             Our syntax node class, containing an abstract kind

@@ -2,25 +2,25 @@ using System.Collections.Generic;
 
 namespace Forte.CodeAnalysis
 {
-    sealed class NumberExpressionSyntax : ExpressionSyntax {
+    public sealed class LiteralExpressionSyntax : ExpressionSyntax {
 
         /*
-            NumberExpressionSyntax
+            LiteralExpressionSyntax
 
             A specified syntax expression node for a number token.
         */
 
-        public NumberExpressionSyntax(SyntaxToken numberToken) {
+        public LiteralExpressionSyntax(SyntaxToken literalToken) {
 
-            NumberToken = numberToken;
+            LiteralToken = literalToken;
         }
 
-        public override SyntaxKind Kind => SyntaxKind.NumberExpression;
-        public SyntaxToken NumberToken { get; }
+        public override SyntaxKind Kind => SyntaxKind.LiteralExpression;
+        public SyntaxToken LiteralToken { get; }
 
         public override IEnumerable<SyntaxNode> GetChildren() {
 
-            yield return NumberToken;
+            yield return LiteralToken;
         }
 
     }

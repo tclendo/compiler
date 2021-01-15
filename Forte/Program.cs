@@ -5,7 +5,7 @@ using Forte.CodeAnalysis;
 
 namespace Forte
 {
-    class Program {
+    internal static class Program {
 
         /*
             Our program class
@@ -13,9 +13,9 @@ namespace Forte
             This program runs our REPL for our Forte language compiler.
         */
 
-        static void Main(string[] args) {
+        private static void Main() {
 
-            bool showTree = false;
+            var showTree = false;
 
             while (true) {
                 Console.Write("$ ");
@@ -45,10 +45,9 @@ namespace Forte
 
                 if (showTree) {
 
-                    var color = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     TreePrint(syntaxTree.Root);
-                    Console.ForegroundColor = color;
+                    Console.ResetColor();
                 }
                 
                 if (!syntaxTree.Diagnostics.Any()) {
@@ -61,14 +60,13 @@ namespace Forte
 
                 else {
 
-                    var color = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.DarkRed;
 
                     foreach (var diagnostic in syntaxTree.Diagnostics) {
 
                         Console.WriteLine(diagnostic);
                     }
-                    Console.ForegroundColor = color;
+                    Console.ResetColor();
                 }
                 
             }
@@ -96,7 +94,7 @@ namespace Forte
 
             Console.WriteLine();
 
-            indent += isLast ? "    " : "│   ";
+            indent += isLast ? "   " : "│  ";
 
             var lastChild = node.GetChildren().LastOrDefault();
 

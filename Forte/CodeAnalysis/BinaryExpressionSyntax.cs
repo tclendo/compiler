@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Forte.CodeAnalysis
 {
-    sealed class BinaryExpressionSyntax : ExpressionSyntax {
+    public sealed class BinaryExpressionSyntax : ExpressionSyntax {
 
         /*
             BinaryExpressionSyntax

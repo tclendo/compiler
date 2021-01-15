@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Forte.CodeAnalysis.Syntax
 {
-    internal sealed class NextTokener {
+    internal sealed class Lexer {
 
         /*
             Our lexer class
@@ -16,7 +16,7 @@ namespace Forte.CodeAnalysis.Syntax
         private int _position;
         private List<string> _diagnostics = new List<string>();
 
-        public NextTokener(string text) {
+        public Lexer(string text) {
             
             /*
                 NextTokener constructor
@@ -124,6 +124,25 @@ namespace Forte.CodeAnalysis.Syntax
                 return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
             }
 
+            // true and false
+            if (char.IsLetter(Current)) {
+
+                // starting position of whitespace (in case multiple)
+                var start = _position;
+
+                while (char.IsLetter(Current)) {
+
+                    Next();
+                }
+
+                // get the length of the whitespace block
+                var length = _position - start;
+                var text = _text.Substring(start, length);
+                var kind = SyntaxFacts.GetKeywordKind(text);
+
+                // return a boolean token
+                return new SyntaxToken(kind, start, text, null);
+            }
             // Artithmetic operators
 
             // generate token for addition

@@ -31,7 +31,7 @@ namespace Forte.CodeAnalysis.Binding
 
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)
         {
-            var value = syntax.LiteralToken.Value as int? ?? 0; // if null, it = 0
+            var value = syntax.Value ?? 0; // if null, it = 0
             return new BoundLiteralExpression(value);
         }
 

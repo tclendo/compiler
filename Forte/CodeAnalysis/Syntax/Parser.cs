@@ -27,7 +27,7 @@ namespace Forte.CodeAnalysis.Syntax
             */
 
             var tokens = new List<SyntaxToken>();
-            var lexer = new NextTokener(text);
+            var lexer = new Lexer(text);
 
             SyntaxToken token;
 
@@ -175,15 +175,30 @@ namespace Forte.CodeAnalysis.Syntax
                 diagnostics that it expected a number.
             */
 
-            if (Current.Kind == SyntaxKind.OpenParenthesisToken) {
+            switch (Current.Kind)
+            {
+                case SyntaxKind.OpenParenthesisToken:
+                {
+                    var left = NextToken();
+                    var expression = ParseExpression();
+                    var right = MatchToken(SyntaxKind.CloseParenthesisToken);
+                    return new ParenthesizedExpressionSyntax(left, expression, right);
+                }
 
-                var left = NextToken();
-                var expression = ParseExpression();
-                var right = MatchToken(SyntaxKind.CloseParenthesisToken);
-                return new ParenthesizedExpressionSyntax(left, expression, right);
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.TrueKeyword:
+                {
+                    var keywordToken = NextToken();
+                    var value = Current.Kind == SyntaxKind.TrueKeyword;
+                    return new LiteralExpressionSyntax(keywordToken, value);
+                }
+
+                default: 
+                {
+                    var numberToken = MatchToken(SyntaxKind.LiteralToken);
+                    return new LiteralExpressionSyntax(numberToken);
+                }
             }
-            var literalToken = MatchToken(SyntaxKind.LiteralToken);
-            return new LiteralExpressionSyntax(literalToken);
         }
     }
 }

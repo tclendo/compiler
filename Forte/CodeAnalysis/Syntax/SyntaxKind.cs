@@ -18,11 +18,16 @@ namespace Forte.CodeAnalysis.Syntax
         SlashToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
+        IdentifierToken,
 
         // Expressions
         LiteralExpression,
         BinaryExpression,
         ParenthesizedExpressionSyntax,
-        UnaryExpression
+        UnaryExpression,
+
+        // Keywords
+        FalseKeyword,
+        TrueKeyword,
     }
 }

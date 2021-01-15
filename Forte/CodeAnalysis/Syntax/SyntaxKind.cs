@@ -8,20 +8,22 @@ namespace Forte.CodeAnalysis.Syntax
         */
 
         // Tokens
-        BadToken,
-        WhitespaceToken,
-        EndOfFileToken,
-        LiteralToken,
-        PlusToken,
-        MinusToken,
-        StarToken,
-        SlashToken,
-        BangToken,
-        AmpersandAmpersandToken,
-        PipePipeToken,
-        OpenParenthesisToken,
-        CloseParenthesisToken,
-        IdentifierToken,
+        BadToken,               //
+        WhitespaceToken,        // " "
+        EndOfFileToken,         // "\0"
+        LiteralToken,           //
+        PlusToken,              // "+"
+        MinusToken,             // "-"
+        StarToken,              // "*"
+        SlashToken,             // "/"
+        BangToken,              // "!"
+        AmpersandAmpersandToken,// "&"
+        PipePipeToken,          // "|"
+        EqualsEqualsToken,      // "=="
+        BangEqualsToken,        // "!="
+        OpenParenthesisToken,   // "("
+        CloseParenthesisToken,  // ")"
+        IdentifierToken,        //
 
         // Expressions
         LiteralExpression,
@@ -30,8 +32,8 @@ namespace Forte.CodeAnalysis.Syntax
         UnaryExpression,
 
         // Keywords
-        FalseKeyword,
-        TrueKeyword,
-        
+        FalseKeyword,           // "true"
+        TrueKeyword,            // "false"
+    
     }
 }

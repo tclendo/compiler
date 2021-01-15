@@ -4,10 +4,15 @@ namespace Forte.CodeAnalysis.Syntax
 {
     internal static class SyntaxFacts {
         
+        /*
+            SyntaxFacts class
+
+            Gives information about the precedence of various operators
+        */
         public static int GetUnaryOperatorPrecedence(this SyntaxKind kind) {
 
             /*
-                Helps get precedence of different operators
+                Helps get precedence of unary operators
             */
             
             switch (kind) {
@@ -15,7 +20,7 @@ namespace Forte.CodeAnalysis.Syntax
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.BangToken:
-                    return 5;
+                    return 6;
                 
                 default:
                     return 0;
@@ -25,19 +30,23 @@ namespace Forte.CodeAnalysis.Syntax
         public static int GetBinaryOperatorPrecedence(this SyntaxKind kind) {
 
             /*
-                Helps get precedence of different operators
+                Helps get precedence of binary operators
             */
             
             switch (kind) {
 
                 case SyntaxKind.StarToken:
                 case SyntaxKind.SlashToken:
-                    return 4;
+                    return 5;
 
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
-                    return 3;
+                    return 4;
                 
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.BangEqualsToken:
+                    return 3;
+
                 case SyntaxKind.AmpersandAmpersandToken:
                     return 2;
 

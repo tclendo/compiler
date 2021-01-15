@@ -22,6 +22,7 @@ namespace Forte.CodeAnalysis
         // Expressions
         LiteralExpression,
         BinaryExpression,
-        ParenthesizedExpressionSyntax
+        ParenthesizedExpressionSyntax,
+        UnaryExpression
     }
 }

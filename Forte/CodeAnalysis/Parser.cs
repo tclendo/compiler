@@ -26,7 +26,7 @@ namespace Forte.CodeAnalysis
             */
 
             var tokens = new List<SyntaxToken>();
-            var lexer = new Lexer(text);
+            var lexer = new NextTokener(text);
 
             SyntaxToken token;
 
@@ -34,7 +34,7 @@ namespace Forte.CodeAnalysis
             do {
 
                 // get the next token from our lexer
-                token = lexer.Lex();
+                token = lexer.NextToken();
 
                 // as long as the token is good, add it to our tokens list
                 if (token.Kind != SyntaxKind.WhitespaceToken &&
@@ -75,10 +75,10 @@ namespace Forte.CodeAnalysis
 
         private SyntaxToken Current => Peek(0);
 
-        private SyntaxToken Lex() {
+        private SyntaxToken NextToken() {
 
             /*
-                Lex
+                NextToken
 
                 Increase the position of 
             */
@@ -98,7 +98,7 @@ namespace Forte.CodeAnalysis
 
             if (Current.Kind == kind) {
 
-                return Lex();
+                return NextToken();
             }
 
             // add an error message to diagnostics if it's a different token than expected
@@ -126,72 +126,46 @@ namespace Forte.CodeAnalysis
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(_diagnostics, expression, endOfFileToken);
         }
-
-        private ExpressionSyntax ParseExpression() {
-
-            /*
-                ParseExpression
-
-                Helper function for ParsePrimaryExpression
-            */
-            return ParseTerm();
-        }
         
-        private ExpressionSyntax ParseTerm() {
-
-            /*
-                ParseTerm
-
-                Returns our parsed term in a semi-recursive way. Uses helper functions ParseFactor
-                --
-                Calls ParseFactor on left to get the value or structure in left
-                If the token after left is a + or -, create a tokenfor that operator.
-                Calls ParseFactor on right to get the value or structure in right
-                --
-                Return a BinaryExpressionSyntax object containing left, operatorToken, and right
-
-            */
-
-            var left = ParseFactor();
-
-            while (Current.Kind == SyntaxKind.PlusToken ||
-                Current.Kind == SyntaxKind.MinusToken) 
-            {
-                var operatorToken = Lex();
-                var right = ParseFactor();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
-
-            return left;
-        }
-
-        private ExpressionSyntax ParseFactor() {
-
-            /*
-                ParseFactor
-
-                Returns a parsed term in a semi-recursive way. Uses helper functions ParsePrimaryExpression
-
-                --
-                Calls ParseFactor on left to get the value or structure in left
-                If the token after left is a * or /, create a token for that operator.
-                Calls ParseFactor on right to get the value or structure in right
-                --
-                Return a BinaryExpressionSyntax object containing left, operatorToken, and right
-
-            */
+        private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
 
             var left = ParsePrimaryExpression();
 
-            while (Current.Kind == SyntaxKind.StarToken ||
-                Current.Kind == SyntaxKind.SlashToken) 
-            {
-                var operatorToken = Lex();
-                var right = ParsePrimaryExpression();
+            while (true) {
+
+                var precedence = GetBinaryOperatorPrecedence(Current.Kind);
+                if (precedence == 0 || precedence <= parentPrecedence) {
+
+                    break;
+                }
+
+                var operatorToken = NextToken();
+                var right = ParseExpression(precedence);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
 
             return left;
+        }
+
+        private static int GetBinaryOperatorPrecedence(SyntaxKind kind) {
+
+            /*
+                Helps get precedence of different operators
+            */
+            
+            switch (kind) {
+
+                case SyntaxKind.StarToken:
+                case SyntaxKind.SlashToken:
+                    return 2;
+
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                    return 1;
+                
+                default:
+                    return 0;
+            }
         }
 
         private ExpressionSyntax ParsePrimaryExpression() {
@@ -209,7 +183,7 @@ namespace Forte.CodeAnalysis
 
             if (Current.Kind == SyntaxKind.OpenParenthesisToken) {
 
-                var left = Lex();
+                var left = NextToken();
                 var expression = ParseExpression();
                 var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                 return new ParenthesizedExpressionSyntax(left, expression, right);

@@ -19,7 +19,7 @@ namespace Forte.CodeAnalysis
         OpenParenthesisToken,
         CloseParenthesisToken,
 
-        // expressions
+        // Expressions
         LiteralExpression,
         BinaryExpression,
         ParenthesizedExpressionSyntax

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Forte.CodeAnalysis
 {
-    internal sealed class Lexer {
+    internal sealed class NextTokener {
 
         /*
             Our lexer class
@@ -16,10 +16,10 @@ namespace Forte.CodeAnalysis
         private int _position;
         private List<string> _diagnostics = new List<string>();
 
-        public Lexer(string text) {
+        public NextTokener(string text) {
             
             /*
-                Lexer constructor
+                NextTokener constructor
 
                 sets the instance variable _text with input text
 
@@ -60,10 +60,10 @@ namespace Forte.CodeAnalysis
             _position++;
         }
 
-        public SyntaxToken Lex() {
+        public SyntaxToken NextToken() {
 
             /*
-                Lex
+                NextToken
 
                 Identifies tokens and returns them.
 

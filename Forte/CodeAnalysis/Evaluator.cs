@@ -1,4 +1,5 @@
 using System;
+using Forte.CodeAnalysis.Syntax;
 
 namespace Forte.CodeAnalysis
 {
@@ -21,7 +22,7 @@ namespace Forte.CodeAnalysis
                 Initialize the root node.
             */
 
-            this._root = root;
+            _root = root;
         }
 
         public int Evaluate() {

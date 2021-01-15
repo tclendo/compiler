@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Forte.CodeAnalysis
+namespace Forte.CodeAnalysis.Syntax
 {
     public sealed class ParenthesizedExpressionSyntax : ExpressionSyntax {
 

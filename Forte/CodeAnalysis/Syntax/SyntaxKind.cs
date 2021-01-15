@@ -1,4 +1,4 @@
-namespace Forte.CodeAnalysis
+namespace Forte.CodeAnalysis.Syntax
 {
     public enum SyntaxKind {
 

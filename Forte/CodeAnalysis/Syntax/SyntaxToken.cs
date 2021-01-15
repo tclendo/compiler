@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Forte.CodeAnalysis
+namespace Forte.CodeAnalysis.Syntax
 {
     public class SyntaxToken : SyntaxNode {
         

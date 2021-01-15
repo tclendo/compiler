@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Forte.CodeAnalysis
+namespace Forte.CodeAnalysis.Syntax
 {
 
     internal sealed class Parser {
@@ -121,6 +121,8 @@ namespace Forte.CodeAnalysis
                 order of operation and hierarchy of operators.
 
                 Returns a SyntaxTree
+
+                CHANGED AFTER EPISODE 2
             */
 
             var expression = ParseExpression();

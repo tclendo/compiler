@@ -19,9 +19,9 @@ namespace Forte.CodeAnalysis.Syntax
         public Lexer(string text) {
             
             /*
-                NextTokener constructor
+                Our lexer constructor
 
-                sets the instance variable _text with input text
+                sets the instance variable _text with our input text
 
             */
             
@@ -34,15 +34,16 @@ namespace Forte.CodeAnalysis.Syntax
 
         private char Lookahead => Peek(1);
 
-            /*
-
-                Current
-
-                returns the _text character at the current _position
-                if we've exceeded the text length, return '\0'.
-            */
-
         private char Peek(int offset) {
+
+            /*
+                Lexer.Peek
+
+                Peeks inside the input at a given offset
+
+                Current uses Peek(0) to get the current indexed character
+                Lookahead uses Peek(1) to get the next indexed character
+            */
 
             var index = _position + offset;
 
@@ -148,38 +149,67 @@ namespace Forte.CodeAnalysis.Syntax
                 // return a boolean token
                 return new SyntaxToken(kind, start, text, null);
             }
-            // Artithmetic operators
 
-            // generate token for addition
+            // List of operators
             switch (Current)
             {
+                // todo: exponents, modulus, 
+                // addition
                 case '+':
                     return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
+                                    
+                // subtraction
                 case '-':
                     return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
+
+                // multiplication
                 case '*':
                     return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
+
+                // division
                 case '/':
                     return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
+
+                // open parenthesis
                 case '(':
                     return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
+
+                // close parenthesis
                 case ')':
                     return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
+
+                // ampersand
                 case '&':
+
+                    // logical and
                     if (Lookahead == '&')
                         return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, _position += 2, "&&", null);
                     break;
+
+                // pipe
                 case '|':
+
+                    // logical or
                     if (Lookahead == '|')
                         return new SyntaxToken(SyntaxKind.PipePipeToken, _position += 2, "||", null);
                     break;
+
+                // equals
                 case '=':
+
+                    // is equal to
                     if (Lookahead == '=')
                         return new SyntaxToken(SyntaxKind.EqualsEqualsToken, _position += 2, "==", null);
                     break;
+
+                // bang
                 case '!':
+
+                    // not equal to
                     if (Lookahead == '=')
                         return new SyntaxToken(SyntaxKind.BangEqualsToken, _position += 2, "!=", null);
+
+                    // logical not
                     else
                         return new SyntaxToken(SyntaxKind.BangToken, _position++, "!", null);
             }

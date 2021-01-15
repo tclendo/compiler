@@ -4,6 +4,12 @@ namespace Forte.CodeAnalysis.Binding
 {
     internal sealed class BoundLiteralExpression : BoundExpression {
 
+        /*
+            Our BoundLiteralExpression class
+
+            Binds a literal expression to its own value.
+        */
+
         public BoundLiteralExpression(object value) {
             Value = value;
         }

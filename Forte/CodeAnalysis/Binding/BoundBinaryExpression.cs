@@ -2,7 +2,16 @@ using System;
 
 namespace Forte.CodeAnalysis.Binding
 {
-    internal sealed class BoundBinaryExpression : BoundExpression {
+    internal sealed class BoundBinaryExpression : BoundExpression 
+        
+        /*
+            Our BoundBinaryExpression class
+
+            Contains an instance of a bound binary expression containing a left
+            and right expression, as well as it's operator. Also contains a type
+            that results from the operator itself.
+        */
+    {
 
         public BoundBinaryExpression(BoundExpression left, BoundBinaryOperator op, BoundExpression right) {
             Left = left;

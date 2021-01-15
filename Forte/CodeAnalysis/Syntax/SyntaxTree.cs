@@ -27,10 +27,10 @@ namespace Forte.CodeAnalysis.Syntax
         public ExpressionSyntax Root { get; }
         public SyntaxToken EndOfFileToken { get; }
 
-        public static SyntaxTree ParseTree(string text) {
+        public static SyntaxTree Parse(string text) {
 
             /*
-                ParseTree
+                Parse
 
                 Creates an instance of the parser class to generate a syntax tree
             */

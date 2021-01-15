@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Forte.CodeAnalysis;
+using Forte.CodeAnalysis.Binding;
 using Forte.CodeAnalysis.Syntax;
 
 namespace Forte
@@ -42,7 +43,11 @@ namespace Forte
                     continue;
                 } 
 
-                var syntaxTree = SyntaxTree.ParseTree(line);
+                var syntaxTree = SyntaxTree.Parse(line);
+                var binder = new Binder();
+                var boundExpression = binder.BindExpression(syntaxTree.Root);
+
+                var diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToArray();
 
                 if (showTree) {
 
@@ -50,10 +55,10 @@ namespace Forte
                     TreePrint(syntaxTree.Root);
                     Console.ResetColor();
                 }
-                
-                if (!syntaxTree.Diagnostics.Any()) {
 
-                    var e = new Evaluator(syntaxTree.Root);
+                if (!diagnostics.Any()) {
+
+                    var e = new Evaluator(boundExpression);
                     var result = e.Evaluate();
                     Console.WriteLine(result);
                     
@@ -63,7 +68,7 @@ namespace Forte
 
                     Console.ForegroundColor = ConsoleColor.DarkRed;
 
-                    foreach (var diagnostic in syntaxTree.Diagnostics) {
+                    foreach (var diagnostic in diagnostics) {
 
                         Console.WriteLine(diagnostic);
                     }

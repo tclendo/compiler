@@ -16,6 +16,9 @@ namespace Forte.CodeAnalysis.Syntax
         MinusToken,
         StarToken,
         SlashToken,
+        BangToken,
+        AmpersandAmpersandToken,
+        PipePipeToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
         IdentifierToken,
@@ -29,5 +32,6 @@ namespace Forte.CodeAnalysis.Syntax
         // Keywords
         FalseKeyword,
         TrueKeyword,
+        
     }
 }

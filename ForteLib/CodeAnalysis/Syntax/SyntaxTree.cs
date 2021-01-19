@@ -12,7 +12,7 @@ namespace Forte.CodeAnalysis.Syntax
             along with any diagnostics data, the root, and eof token.
         */
 
-        public SyntaxTree(IEnumerable<string> diagnostics, ExpressionSyntax root, SyntaxToken endOfFileToken) {
+        public SyntaxTree(IEnumerable<Diagnostic> diagnostics, ExpressionSyntax root, SyntaxToken endOfFileToken) {
 
             /*
                 SyntaxTree constructor
@@ -23,7 +23,7 @@ namespace Forte.CodeAnalysis.Syntax
             EndOfFileToken = endOfFileToken;
         }
 
-        public IReadOnlyList<string> Diagnostics { get; }
+        public IReadOnlyList<Diagnostic> Diagnostics { get; }
         public ExpressionSyntax Root { get; }
         public SyntaxToken EndOfFileToken { get; }
 

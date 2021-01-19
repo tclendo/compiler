@@ -16,7 +16,7 @@ namespace Forte.CodeAnalysis.Syntax
 
         private readonly SyntaxToken[] _tokens;
         private int _position;
-        private List<string> _diagnostics = new List<string>();
+        private DiagnosticBag _diagnostics = new DiagnosticBag();
 
         public Parser(string text) {
 
@@ -35,7 +35,7 @@ namespace Forte.CodeAnalysis.Syntax
             do {
 
                 // get the next token from our lexer
-                token = lexer.NextToken();
+                token = lexer.Lex();
 
                 // as long as the token is good, add it to our tokens list
                 if (token.Kind != SyntaxKind.WhitespaceToken &&
@@ -52,7 +52,7 @@ namespace Forte.CodeAnalysis.Syntax
             _diagnostics.AddRange(lexer.Diagnostics);
         }
 
-        public IEnumerable<string> Diagnostics => _diagnostics;
+        public DiagnosticBag Diagnostics => _diagnostics;
 
         private SyntaxToken Peek(int offset) {
 
@@ -76,10 +76,10 @@ namespace Forte.CodeAnalysis.Syntax
 
         private SyntaxToken Current => Peek(0);
 
-        private SyntaxToken NextToken() {
+        private SyntaxToken Lex() {
 
             /*
-                NextToken
+                Lex
 
                 Increase the position of 
             */
@@ -99,11 +99,11 @@ namespace Forte.CodeAnalysis.Syntax
 
             if (Current.Kind == kind) {
 
-                return NextToken();
+                return Lex();
             }
 
             // add an error message to diagnostics if it's a different token than expected
-            _diagnostics.Add($"ERROR: Unexpected token <{Current.Kind}>, expected <{kind}>");
+            _diagnostics.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
             
             // return 
             return new SyntaxToken(kind, Current.Position, null, null);
@@ -147,7 +147,7 @@ namespace Forte.CodeAnalysis.Syntax
             var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
             if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence) {
 
-                var operatorToken = NextToken();
+                var operatorToken = Lex();
                 var operand = ParseExpression(unaryOperatorPrecedence);
                 left = new UnaryExpressionSyntax(operatorToken, operand);
 
@@ -170,7 +170,7 @@ namespace Forte.CodeAnalysis.Syntax
                     break;
                 }
 
-                var operatorToken = NextToken();    // we call nexttoken because we want our parser to continuously parse input.
+                var operatorToken = Lex();    // we call nexttoken because we want our parser to continuously parse input.
                 var right = ParseExpression(precedence);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
@@ -195,7 +195,7 @@ namespace Forte.CodeAnalysis.Syntax
                 // todo: change how parentheses work i think?
                 case SyntaxKind.OpenParenthesisToken:
                 {
-                    var left = NextToken();
+                    var left = Lex();
                     var expression = ParseExpression();
                     var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                     return new ParenthesizedExpressionSyntax(left, expression, right);
@@ -205,7 +205,7 @@ namespace Forte.CodeAnalysis.Syntax
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.TrueKeyword:
                 {
-                    var keywordToken = NextToken();
+                    var keywordToken = Lex();
                     var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
                     return new LiteralExpressionSyntax(keywordToken, value);
                 }

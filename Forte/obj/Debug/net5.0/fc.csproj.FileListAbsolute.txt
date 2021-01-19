@@ -14,3 +14,6 @@ C:\Users\troyc\Documents\GitHub\compiler\Forte\obj\Debug\net5.0\fc.dll
 C:\Users\troyc\Documents\GitHub\compiler\Forte\obj\Debug\net5.0\ref\fc.dll
 C:\Users\troyc\Documents\GitHub\compiler\Forte\obj\Debug\net5.0\fc.pdb
 C:\Users\troyc\Documents\GitHub\compiler\Forte\obj\Debug\net5.0\fc.genruntimeconfig.cache
+C:\Users\troyc\Documents\GitHub\compiler\Forte\bin\Debug\net5.0\ForteLib.dll
+C:\Users\troyc\Documents\GitHub\compiler\Forte\bin\Debug\net5.0\ForteLib.pdb
+C:\Users\troyc\Documents\GitHub\compiler\Forte\obj\Debug\net5.0\fc.csproj.CopyComplete

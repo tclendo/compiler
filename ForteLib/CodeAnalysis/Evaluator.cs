@@ -1,6 +1,6 @@
 using System;
+
 using Forte.CodeAnalysis.Binding;
-using Forte.CodeAnalysis.Syntax;
 
 namespace Forte.CodeAnalysis
 {

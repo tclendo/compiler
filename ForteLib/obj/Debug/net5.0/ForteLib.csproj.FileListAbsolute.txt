@@ -1,0 +1,12 @@
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\bin\Debug\net5.0\ForteLib.deps.json
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\bin\Debug\net5.0\ForteLib.dll
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\bin\Debug\net5.0\ref\ForteLib.dll
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\bin\Debug\net5.0\ForteLib.pdb
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\obj\Debug\net5.0\ForteLib.csprojAssemblyReference.cache
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\obj\Debug\net5.0\ForteLib.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\obj\Debug\net5.0\ForteLib.AssemblyInfoInputs.cache
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\obj\Debug\net5.0\ForteLib.AssemblyInfo.cs
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\obj\Debug\net5.0\ForteLib.csproj.CoreCompileInputs.cache
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\obj\Debug\net5.0\ForteLib.dll
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\obj\Debug\net5.0\ref\ForteLib.dll
+C:\Users\troyc\Documents\GitHub\compiler\ForteLib\obj\Debug\net5.0\ForteLib.pdb

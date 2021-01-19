@@ -6,14 +6,6 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "fc/1.0.0": {
-        "dependencies": {
-          "ForteLib": "1.0.0"
-        },
-        "runtime": {
-          "fc.dll": {}
-        }
-      },
       "ForteLib/1.0.0": {
         "runtime": {
           "ForteLib.dll": {}
@@ -22,11 +14,6 @@
     }
   },
   "libraries": {
-    "fc/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "ForteLib/1.0.0": {
       "type": "project",
       "serviceable": false,

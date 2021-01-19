@@ -8,9 +8,9 @@ namespace Forte.CodeAnalysis.Binding
             BoundUnaryExpression class
 
             Constructs a bound unary expression instance that contains the operator,
-            operand, as well as the type that results from it.
+            operand. Also contains a type that results from the operator.
         */
-        
+
         public BoundUnaryExpression(BoundUnaryOperator op, BoundExpression operand) {
             Op = op;
             Operand = operand;

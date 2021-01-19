@@ -35,6 +35,9 @@ namespace Forte.CodeAnalysis.Binding
                 case SyntaxKind.BinaryExpression:
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
                 // if it's some other kind of expression, throw an exception
+                case SyntaxKind.ParenthesizedExpressionSyntax:
+                    return BindExpression(((ParenthesizedExpressionSyntax)syntax).Expression);
+                // if it's some other kind of expression, throw an exception
                 default:
                     throw new Exception($"Unexpected syntax{syntax.Kind}");
             }

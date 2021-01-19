@@ -34,13 +34,9 @@ namespace Forte
                     Console.Clear();
                     continue;
 
-                } else if (line == "exit") {
-
-                    return;
-                
                 } else if (string.IsNullOrWhiteSpace(line)) {
 
-                    continue;
+                    return;
                 } 
 
                 var syntaxTree = SyntaxTree.Parse(line);

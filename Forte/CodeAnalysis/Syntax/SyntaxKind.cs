@@ -34,6 +34,5 @@ namespace Forte.CodeAnalysis.Syntax
         // Keywords
         FalseKeyword,           // "true"
         TrueKeyword,            // "false"
-    
     }
 }

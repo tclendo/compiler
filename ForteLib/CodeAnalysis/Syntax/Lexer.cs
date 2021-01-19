@@ -66,10 +66,10 @@ namespace Forte.CodeAnalysis.Syntax
             _position++;
         }
 
-        public SyntaxToken Lex() {
+        public SyntaxToken NextToken() {
 
             /*
-                Lex
+                NextToken
 
                 Identifies tokens and returns them.
 
@@ -204,8 +204,10 @@ namespace Forte.CodeAnalysis.Syntax
                     if (Lookahead == '=') {
                         _position += 2;
                         return new SyntaxToken(SyntaxKind.EqualsEqualsToken, start, "==", null);
+                    } else {
+                        _position += 1;
+                        return new SyntaxToken(SyntaxKind.EqualsToken, start, "=", null);
                     }
-                    break;
 
                 // bang
                 case '!':

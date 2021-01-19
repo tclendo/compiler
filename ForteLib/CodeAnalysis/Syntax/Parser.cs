@@ -35,7 +35,7 @@ namespace Forte.CodeAnalysis.Syntax
             do {
 
                 // get the next token from our lexer
-                token = lexer.Lex();
+                token = lexer.NextToken();
 
                 // as long as the token is good, add it to our tokens list
                 if (token.Kind != SyntaxKind.WhitespaceToken &&
@@ -76,10 +76,10 @@ namespace Forte.CodeAnalysis.Syntax
 
         private SyntaxToken Current => Peek(0);
 
-        private SyntaxToken Lex() {
+        private SyntaxToken NextToken() {
 
             /*
-                Lex
+                NextToken
 
                 Increase the position of 
             */
@@ -99,7 +99,7 @@ namespace Forte.CodeAnalysis.Syntax
 
             if (Current.Kind == kind) {
 
-                return Lex();
+                return NextToken();
             }
 
             // add an error message to diagnostics if it's a different token than expected
@@ -127,8 +127,27 @@ namespace Forte.CodeAnalysis.Syntax
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(_diagnostics, expression, endOfFileToken);
         }
-        
-        private ExpressionSyntax ParseExpression(int parentPrecedence = 0) {
+
+        private ExpressionSyntax ParseExpression() {
+
+            return ParseAssignmentExpression();
+        }
+
+        private ExpressionSyntax ParseAssignmentExpression() {
+
+            if (Peek(0).Kind == SyntaxKind.IdentifierToken &&
+                Peek(1).Kind == SyntaxKind.EqualsEqualsToken) 
+            {
+                var identifierToken = NextToken();
+                var operatorToken = NextToken();
+                var right = ParseAssignmentExpression();
+                return new AssignmentExpressionSyntax(identifierToken, operatorToken, right);
+
+            }
+
+            return ParseBinaryExpression();
+        }
+        private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0) {
 
             /*
                 Parser.ParseExpression
@@ -147,8 +166,8 @@ namespace Forte.CodeAnalysis.Syntax
             var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
             if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence) {
 
-                var operatorToken = Lex();
-                var operand = ParseExpression(unaryOperatorPrecedence);
+                var operatorToken = NextToken();
+                var operand = ParseBinaryExpression(unaryOperatorPrecedence);
                 left = new UnaryExpressionSyntax(operatorToken, operand);
 
             }
@@ -170,8 +189,8 @@ namespace Forte.CodeAnalysis.Syntax
                     break;
                 }
 
-                var operatorToken = Lex();    // we call nexttoken because we want our parser to continuously parse input.
-                var right = ParseExpression(precedence);
+                var operatorToken = NextToken();    // we call nexttoken because we want our parser to continuously parse input.
+                var right = ParseBinaryExpression(precedence);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
 
@@ -195,7 +214,7 @@ namespace Forte.CodeAnalysis.Syntax
                 // todo: change how parentheses work i think?
                 case SyntaxKind.OpenParenthesisToken:
                 {
-                    var left = Lex();
+                    var left = NextToken();
                     var expression = ParseExpression();
                     var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                     return new ParenthesizedExpressionSyntax(left, expression, right);
@@ -205,9 +224,15 @@ namespace Forte.CodeAnalysis.Syntax
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.TrueKeyword:
                 {
-                    var keywordToken = Lex();
+                    var keywordToken = NextToken();
                     var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
                     return new LiteralExpressionSyntax(keywordToken, value);
+                }
+
+                case SyntaxKind.IdentifierToken: {
+
+                    var identifierToken = NextToken();
+                    return new NameExpressionSyntax(identifierToken);
                 }
 
                 // default case is that the literal has a number value, and is a number token.

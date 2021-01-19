@@ -36,11 +36,20 @@ namespace Forte.CodeAnalysis.Binding
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
                 // if it's some other kind of expression, throw an exception
                 case SyntaxKind.ParenthesizedExpressionSyntax:
-                    return BindExpression(((ParenthesizedExpressionSyntax)syntax).Expression);
+                    return BindParenthesizedExpression((ParenthesizedExpressionSyntax)syntax);
                 // if it's some other kind of expression, throw an exception
+                case SyntaxKind.NameExpression:
+                    return BindNameExpression((NameExpressionSyntax)syntax);
+                case SyntaxKind.AssignmentExpression:
+                    return BindAssignmentExpression((AssignmentExpressionSyntax)syntax);
                 default:
                     throw new Exception($"Unexpected syntax{syntax.Kind}");
             }
+        }
+
+        private BoundExpression BindParenthesizedExpression(ParenthesizedExpressionSyntax syntax)
+        {
+            return BindExpression(syntax.Expression);
         }
 
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)

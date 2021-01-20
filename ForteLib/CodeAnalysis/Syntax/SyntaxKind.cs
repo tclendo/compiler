@@ -17,6 +17,7 @@ namespace Forte.CodeAnalysis.Syntax
         StarToken,              // "*"
         SlashToken,             // "/"
         BangToken,              // "!"
+        EqualsToken,            // "="
         AmpersandAmpersandToken,// "&"
         PipePipeToken,          // "|"
         EqualsEqualsToken,      // "=="
@@ -25,14 +26,16 @@ namespace Forte.CodeAnalysis.Syntax
         CloseParenthesisToken,  // ")"
         IdentifierToken,        //
 
-        // Expressions
-        LiteralExpression,
-        BinaryExpression,
-        ParenthesizedExpressionSyntax,
-        UnaryExpression,
-
         // Keywords
         FalseKeyword,           // "true"
         TrueKeyword,            // "false"
+        
+        // Expressions
+        LiteralExpression,
+        NameExpression,
+        BinaryExpression,
+        ParenthesizedExpressionSyntax,
+        UnaryExpression,
+        AssignmentExpression,
     }
 }

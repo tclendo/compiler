@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Forte.CodeAnalysis;
@@ -18,7 +19,8 @@ namespace Forte
         private static void Main() {
 
             var showTree = false;
-
+            var variables = new Dictionary<VariableSymbol, object>();
+            
             while (true) {
                 Console.Write("$ ");
                 var line = Console.ReadLine();
@@ -41,7 +43,7 @@ namespace Forte
 
                 var syntaxTree = SyntaxTree.Parse(line);
                 var compilation = new Compilation(syntaxTree);
-                var result = compilation.Evaluate();
+                var result = compilation.Evaluate(variables);
 
                 var diagnostics = result.Diagnostics;
 

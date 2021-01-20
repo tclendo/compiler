@@ -136,7 +136,7 @@ namespace Forte.CodeAnalysis.Syntax
         private ExpressionSyntax ParseAssignmentExpression() {
 
             if (Peek(0).Kind == SyntaxKind.IdentifierToken &&
-                Peek(1).Kind == SyntaxKind.EqualsEqualsToken) 
+                Peek(1).Kind == SyntaxKind.EqualsToken)
             {
                 var identifierToken = NextToken();
                 var operatorToken = NextToken();

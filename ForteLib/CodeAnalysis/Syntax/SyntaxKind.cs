@@ -17,6 +17,7 @@ namespace Forte.CodeAnalysis.Syntax
         StarToken,              // "*"
         SlashToken,             // "/"
         BangToken,              // "!"
+        EqualsToken,            // "="
         AmpersandAmpersandToken,// "&"
         PipePipeToken,          // "|"
         EqualsEqualsToken,      // "=="

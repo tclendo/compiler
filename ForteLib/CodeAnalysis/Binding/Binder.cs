@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Forte.CodeAnalysis.Syntax;
 
 namespace Forte.CodeAnalysis.Binding
 {
+
     internal sealed class Binder {
 
         /*
@@ -14,7 +16,14 @@ namespace Forte.CodeAnalysis.Binding
             operators.
         */
 
+        private readonly Dictionary<VariableSymbol, object> _variables;
         private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
+
+        public Binder(Dictionary<VariableSymbol, object> variables) {
+
+            _variables = variables;
+        }
+
         public DiagnosticBag Diagnostics => _diagnostics;
 
         public BoundExpression BindExpression(ExpressionSyntax syntax) 
@@ -25,9 +34,16 @@ namespace Forte.CodeAnalysis.Binding
 
             switch (syntax.Kind) 
             {
+                // if it's a parenthesized expression, return a parenthesized expression
+                case SyntaxKind.ParenthesizedExpressionSyntax:
+                    return BindParenthesizedExpression((ParenthesizedExpressionSyntax)syntax);                
                 // if it's a literal expression, it should just return a bound expression of itself.
                 case SyntaxKind.LiteralExpression:
                     return BindLiteralExpression((LiteralExpressionSyntax)syntax);
+                case SyntaxKind.NameExpression:
+                    return BindNameExpression((NameExpressionSyntax)syntax);
+                case SyntaxKind.AssignmentExpression:
+                    return BindAssignmentExpression((AssignmentExpressionSyntax)syntax);
                 // if it's a unary expression, it should return a bound expression of an operand and an operator
                 case SyntaxKind.UnaryExpression:
                     return BindUnaryExpression((UnaryExpressionSyntax)syntax);
@@ -35,13 +51,6 @@ namespace Forte.CodeAnalysis.Binding
                 case SyntaxKind.BinaryExpression:
                     return BindBinaryExpression((BinaryExpressionSyntax)syntax);
                 // if it's some other kind of expression, throw an exception
-                case SyntaxKind.ParenthesizedExpressionSyntax:
-                    return BindParenthesizedExpression((ParenthesizedExpressionSyntax)syntax);
-                // if it's some other kind of expression, throw an exception
-                case SyntaxKind.NameExpression:
-                    return BindNameExpression((NameExpressionSyntax)syntax);
-                case SyntaxKind.AssignmentExpression:
-                    return BindAssignmentExpression((AssignmentExpressionSyntax)syntax);
                 default:
                     throw new Exception($"Unexpected syntax{syntax.Kind}");
             }
@@ -52,17 +61,48 @@ namespace Forte.CodeAnalysis.Binding
             return BindExpression(syntax.Expression);
         }
 
-        private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)
+        private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax) {
 
             /*
                 Binder.BindLiteralExpression
 
                 Binds a LiteralExpressionSytnax to its bound form.
             */
-
-        {
+        
             var value = syntax.Value ?? 0; // if null, value = 0
             return new BoundLiteralExpression(value);
+        }
+
+        private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
+        {
+            var name = syntax.IdentifierToken.Text;
+
+            var variable = _variables.Keys.FirstOrDefault(v => v.Name == name);
+            
+            if (variable == null) {
+
+                _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
+                return new BoundLiteralExpression(0); 
+            }
+
+            return new BoundVariableExpression(variable);
+        }
+
+        private BoundExpression BindAssignmentExpression(AssignmentExpressionSyntax syntax)
+        {
+            var name = syntax.IdentifierToken.Text;
+            var boundExpression = BindExpression(syntax.Expression);
+            
+            var existingVariable = _variables.Keys.FirstOrDefault(v => v.Name == name);
+            if (existingVariable != null) {
+
+                _variables.Remove(existingVariable);
+            }
+
+            var variable = new VariableSymbol(name, boundExpression.Type);
+            _variables[variable] = null;
+
+            return new BoundAssignmentExpression(variable, boundExpression);
         }
 
         private BoundExpression BindUnaryExpression(UnaryExpressionSyntax syntax)

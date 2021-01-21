@@ -11,7 +11,7 @@ namespace Forte.CodeAnalysis.Syntax
         BadToken,               //
         WhitespaceToken,        // " "
         EndOfFileToken,         // "\0"
-        LiteralToken,           //
+        NumberToken,
         PlusToken,              // "+"
         MinusToken,             // "-"
         StarToken,              // "*"
@@ -31,7 +31,7 @@ namespace Forte.CodeAnalysis.Syntax
         TrueKeyword,            // "false"
         
         // Expressions
-        LiteralExpression,
+        LiteralExpression,  
         NameExpression,
         BinaryExpression,
         ParenthesizedExpressionSyntax,

@@ -35,7 +35,7 @@ namespace Forte.CodeAnalysis.Syntax
             do {
 
                 // get the next token from our lexer
-                token = lexer.NextToken();
+                token = lexer.Lex();
 
                 // as long as the token is good, add it to our tokens list
                 if (token.Kind != SyntaxKind.WhitespaceToken &&
@@ -239,7 +239,7 @@ namespace Forte.CodeAnalysis.Syntax
                 // we still check that it is, however.
                 default: 
                 {
-                    var numberToken = MatchToken(SyntaxKind.LiteralToken);
+                    var numberToken = MatchToken(SyntaxKind.NumberToken);
                     return new LiteralExpressionSyntax(numberToken);
                 }
             }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fc", "Forte\fc.csproj", "{0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForteLib", "ForteLib\ForteLib.csproj", "{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forte.Tests", "Forte.Tests\Forte.Tests.csproj", "{56214976-C7CA-466B-A9D7-752652EB259A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|x64.Build.0 = Release|Any CPU
 		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|x86.ActiveCfg = Release|Any CPU
 		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|x86.Build.0 = Release|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Debug|x64.Build.0 = Debug|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Debug|x86.Build.0 = Debug|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Release|x64.ActiveCfg = Release|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Release|x64.Build.0 = Release|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Release|x86.ActiveCfg = Release|Any CPU
+		{56214976-C7CA-466B-A9D7-752652EB259A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -66,7 +66,7 @@ namespace Forte.CodeAnalysis.Syntax
             _position++;
         }
 
-        public SyntaxToken NextToken() {
+        public SyntaxToken Lex() {
 
             /*
                 NextToken
@@ -109,7 +109,7 @@ namespace Forte.CodeAnalysis.Syntax
                 }
 
                 // return a number token
-                return new SyntaxToken(SyntaxKind.LiteralToken, start, text, value);
+                return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
             }
 
             // check if the current character is a white space

@@ -6,12 +6,14 @@ using Xunit;
 
 namespace Forte.Tests.CodeAnalysis.Syntax
 {
+
     public class LexerTest
     {
         [Theory]
         [MemberData(nameof(GetTokensData))]
         public void Lexer_Lexes_Token(SyntaxKind kind, string text)
         {
+            // expose ParseTokens to make sure that the tokens are a valid identifier
             var tokens = SyntaxTree.ParseTokens(text);
 
             var token = Assert.Single(tokens);

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fc", "Forte\fc.csproj", "{06897247-7BAA-4312-B7D7-4A1726E23029}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForteLib", "ForteLib\ForteLib.csproj", "{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{06897247-7BAA-4312-B7D7-4A1726E23029}.Release|x64.Build.0 = Release|Any CPU
 		{06897247-7BAA-4312-B7D7-4A1726E23029}.Release|x86.ActiveCfg = Release|Any CPU
 		{06897247-7BAA-4312-B7D7-4A1726E23029}.Release|x86.Build.0 = Release|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Debug|x64.Build.0 = Debug|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Debug|x86.Build.0 = Debug|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|x64.ActiveCfg = Release|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|x64.Build.0 = Release|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|x86.ActiveCfg = Release|Any CPU
+		{0D87E2B5-728B-48AD-AE5E-6401EA5096E2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

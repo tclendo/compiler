@@ -13,8 +13,13 @@ namespace Forte.CodeAnalysis.Syntax
         */
 
         private readonly string _text;
+        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
+
         private int _position;
-        private DiagnosticBag _diagnostics = new DiagnosticBag();
+        
+        private int _start;
+        private SyntaxKind _kind;
+        private object _value;
 
         public Lexer(string text) {
             
@@ -55,17 +60,6 @@ namespace Forte.CodeAnalysis.Syntax
             return _text[index];
         }
 
-        private void Next() {
-
-            /*
-                Next()
-
-                Increses the index we use to reference our _text.
-            */
-
-            _position++;
-        }
-
         public SyntaxToken Lex() {
 
             /*
@@ -79,111 +73,61 @@ namespace Forte.CodeAnalysis.Syntax
                 <whitespace>
             */
 
-            // if we've reached the end of the text, return "\0"
-            if (_position >= _text.Length) {
-
-                // return an end of file token
-                return new SyntaxToken(SyntaxKind.EndOfFileToken, _position, "\0", null);
-            }
-
-            var start = _position;
-
-            // check if the current character is a number
-            if (char.IsDigit(Current)) {
-
-                // starting digit of the number
-
-                while (char.IsDigit(Current)) {
-
-                    Next();
-                }
-
-                // at the end of the previous while loop, we should have the start and end digit
-                var length = _position - start;
-                var text = _text.Substring(start, length);
-
-                // try to convert the string into an int, add errors if it can't be done
-                if (!int.TryParse(text, out var value)) {
-
-                    _diagnostics.ReportInvalidNumber(new TextSpan(start, length), _text, typeof(int));
-                }
-
-                // return a number token
-                return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
-            }
-
-            // check if the current character is a white space
-            if (char.IsWhiteSpace(Current)) {
-
-                // starting position of whitespace (in case multiple)
-
-                while (char.IsWhiteSpace(Current)) {
-
-                    Next();
-                }
-
-                // get the length of the whitespace block
-                var length = _position - start;
-                var text = _text.Substring(start, length);
-
-                // return a whitespace token
-                return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
-            }
-
-            // true and false
-            if (char.IsLetter(Current)) {
-
-                // starting position of whitespace (in case multiple)
-
-                while (char.IsLetter(Current)) {
-
-                    Next();
-                }
-
-                // get the length of the whitespace block
-                var length = _position - start;
-                var text = _text.Substring(start, length);
-                var kind = SyntaxFacts.GetKeywordKind(text);
-
-                // return a boolean token
-                return new SyntaxToken(kind, start, text, null);
-            }
-
+            _start = _position;
+            _kind = SyntaxKind.BadToken;
+            _value = null;
+            
             // List of operators
             switch (Current)
             {
+                case '\0':
+                    _kind = SyntaxKind.EndOfFileToken;
+                    break;
                 // todo: exponents, modulus, 
                 // addition
                 case '+':
-                    return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
+                    _kind = SyntaxKind.PlusToken;
+                    _position++;
+                    break;
                                     
                 // subtraction
                 case '-':
-                    return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
+                    _kind = SyntaxKind.MinusToken;
+                    _position++;
+                    break;
 
                 // multiplication
                 case '*':
-                    return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
+                    _kind = SyntaxKind.StarToken;
+                    _position++;
+                    break;
 
                 // division
                 case '/':
-                    return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
+                    _kind = SyntaxKind.SlashToken;
+                    _position++;
+                    break;
 
                 // open parenthesis
                 case '(':
-                    return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
+                    _kind = SyntaxKind.OpenParenthesisToken;
+                    _position++;
+                    break;
 
                 // close parenthesis
                 case ')':
-                    return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
+                    _kind = SyntaxKind.CloseParenthesisToken;
+                    _position++;
+                    break;
 
                 // ampersand
                 case '&':
 
                     // logical and
                     if (Lookahead == '&') {
+                        _kind = SyntaxKind.AmpersandAmpersandToken;
                         _position += 2;
-                        return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, start, "&&", null);
+                        break;
                     }
                     break;
 
@@ -192,40 +136,118 @@ namespace Forte.CodeAnalysis.Syntax
 
                     // logical or
                     if (Lookahead == '|') {
+                        _kind = SyntaxKind.PipePipeToken;
                         _position += 2;
-                        return new SyntaxToken(SyntaxKind.PipePipeToken, start, "||", null);
+                        break;
                     }
                     break;
 
                 // equals
                 case '=':
-
+                    _position++;
                     // is equal to
-                    if (Lookahead == '=') {
-                        _position += 2;
-                        return new SyntaxToken(SyntaxKind.EqualsEqualsToken, start, "==", null);
+                    if (Current != '=') {
+                        _kind = SyntaxKind.EqualsToken;
+
                     } else {
-                        _position += 1;
-                        return new SyntaxToken(SyntaxKind.EqualsToken, start, "=", null);
+                        _position++;
+                        _kind = SyntaxKind.EqualsEqualsToken;
                     }
+                    break;
 
                 // bang
                 case '!':
-
+                    _position++;
                     // not equal to
-                    if (Lookahead == '=') {
-                        _position += 2;
-                        return new SyntaxToken(SyntaxKind.BangEqualsToken, start, "!=", null);
+                    if (Current != '=') {
+                        _kind = SyntaxKind.BangToken;
                     }
                     // logical not
                     else {
-                        _position += 1;
-                        return new SyntaxToken(SyntaxKind.BangToken, start, "!", null);
+                        _kind = SyntaxKind.BangEqualsToken;
+                        _position++;
                     }
+                    break;
+
+                case '0': case '1': case '2': case '3': case '4':
+                case '5': case '6': case '7': case '8': case '9':
+                    ReadNumberToken();
+                    break;
+
+                case ' ': case '\t': case '\n': case '\r':
+                    ReadWhiteSpace();
+                    break;
+                    
+                default:
+                    // check if the current character is a white space
+                    if (char.IsLetter(Current))
+                    {
+                        // starting position of whitespace (in case multiple)
+                        ReadIdentifierOrKeyword();
+                        // return a boolean token
+                    } else if (char.IsWhiteSpace(Current))
+                    {
+                        // starting position of whitespace (in case multiple)
+                        ReadWhiteSpace();
+                        // return a whitespace token
+                    }
+
+                    // true and false
+                    else {
+                        _diagnostics.ReportBadCharacter(_position, Current);
+                        _position++;
+                    }
+                    break;
+            }
+            
+            var length = _position - _start;
+            var text = SyntaxFacts.GetText(_kind);
+            if (text == null) {
+                text = _text.Substring(_start, length);
             }
 
-            _diagnostics.ReportBadCharacter(_position, Current);
-            return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);
+            return new SyntaxToken(_kind, _start, text, _value);
+        }
+
+        private void ReadWhiteSpace()
+        {
+            while (char.IsWhiteSpace(Current)) {
+                _position++;
+            }
+
+            _kind = SyntaxKind.WhitespaceToken;
+        }
+
+        private void ReadIdentifierOrKeyword()
+        {
+            while (char.IsLetter(Current)) {
+                _position++;
+            }
+
+            // get the length of the whitespace block
+            var length = _position - _start;
+            var text = _text.Substring(_start, length);
+            _kind = SyntaxFacts.GetKeywordKind(text);
+        }
+
+        private void ReadNumberToken()
+        {
+            while (char.IsDigit(Current)){
+                _position++;
+            }
+
+            // at the end of the previous while loop, we should have the start and end digit
+            var length = _position - _start;
+            var text = _text.Substring(_start, length);
+
+            // try to convert the string into an int, add errors if it can't be done
+            if (!int.TryParse(text, out var value))
+            {
+
+                _diagnostics.ReportInvalidNumber(new TextSpan(_start, length), _text, typeof(int));
+            }
+            _value = value;
+            _kind = SyntaxKind.NumberToken;
         }
     }
 }

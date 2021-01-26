@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Forte.CodeAnalysis.Syntax
 {
 
-    internal sealed class Parser {
+    internal sealed class Parser
+    {
 
         /*
             Our parser class
@@ -14,11 +16,13 @@ namespace Forte.CodeAnalysis.Syntax
             Read tokens -> Create parse tree
         */
 
-        private readonly SyntaxToken[] _tokens;
-        private int _position;
-        private DiagnosticBag _diagnostics = new DiagnosticBag();
+        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
+        private readonly ImmutableArray<SyntaxToken> _tokens;
 
-        public Parser(string text) {
+        private int _position;
+
+        public Parser(string text)
+        {
 
             /*
                 Parser constructor
@@ -47,14 +51,15 @@ namespace Forte.CodeAnalysis.Syntax
             } while (token.Kind != SyntaxKind.EndOfFileToken);
 
             // copy our tokens array to our instance variable _tokens
-            _tokens = tokens.ToArray();
+            _tokens = tokens.ToImmutableArray();
             // add any diagnostics info to our diagnostics
             _diagnostics.AddRange(lexer.Diagnostics);
         }
 
         public DiagnosticBag Diagnostics => _diagnostics;
 
-        private SyntaxToken Peek(int offset) {
+        private SyntaxToken Peek(int offset)
+        {
 
             /*
                 Peek
@@ -76,7 +81,8 @@ namespace Forte.CodeAnalysis.Syntax
 
         private SyntaxToken Current => Peek(0);
 
-        private SyntaxToken NextToken() {
+        private SyntaxToken NextToken()
+        {
 
             /*
                 NextToken
@@ -89,7 +95,8 @@ namespace Forte.CodeAnalysis.Syntax
             return current;
         }
 
-        private SyntaxToken MatchToken(SyntaxKind kind) {
+        private SyntaxToken MatchToken(SyntaxKind kind)
+        {
 
             /*
                 MatchToken
@@ -109,7 +116,8 @@ namespace Forte.CodeAnalysis.Syntax
             return new SyntaxToken(kind, Current.Position, null, null);
         }
 
-        public SyntaxTree Parse() {
+        public SyntaxTree Parse()
+        {
             
             /*
                 Parse
@@ -125,15 +133,17 @@ namespace Forte.CodeAnalysis.Syntax
 
             var expression = ParseExpression();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(_diagnostics, expression, endOfFileToken);
+            return new SyntaxTree(_diagnostics.ToImmutableArray(), expression, endOfFileToken);
         }
 
-        private ExpressionSyntax ParseExpression() {
+        private ExpressionSyntax ParseExpression()
+        {
 
             return ParseAssignmentExpression();
         }
 
-        private ExpressionSyntax ParseAssignmentExpression() {
+        private ExpressionSyntax ParseAssignmentExpression()
+        {
 
             if (Peek(0).Kind == SyntaxKind.IdentifierToken &&
                 Peek(1).Kind == SyntaxKind.EqualsToken)
@@ -147,7 +157,9 @@ namespace Forte.CodeAnalysis.Syntax
 
             return ParseBinaryExpression();
         }
-        private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0) {
+
+        private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0)
+        {
 
             /*
                 Parser.ParseExpression
@@ -213,36 +225,43 @@ namespace Forte.CodeAnalysis.Syntax
             {
                 // todo: change how parentheses work i think?
                 case SyntaxKind.OpenParenthesisToken:
-                {
-                    var left = NextToken();
-                    var expression = ParseExpression();
-                    var right = MatchToken(SyntaxKind.CloseParenthesisToken);
-                    return new ParenthesizedExpressionSyntax(left, expression, right);
-                }
-
-                // if the cases are true or false keywords, their value is true or false
+                    return ParseParenthesizedExpression();
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.TrueKeyword:
-                {
-                    var keywordToken = NextToken();
-                    var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
-                    return new LiteralExpressionSyntax(keywordToken, value);
-                }
-
-                case SyntaxKind.IdentifierToken: {
-
-                    var identifierToken = NextToken();
-                    return new NameExpressionSyntax(identifierToken);
-                }
-
-                // default case is that the literal has a number value, and is a number token.
-                // we still check that it is, however.
-                default: 
-                {
-                    var numberToken = MatchToken(SyntaxKind.NumberToken);
-                    return new LiteralExpressionSyntax(numberToken);
-                }
+                    return ParseBooleanLiteral();
+                case SyntaxKind.NumberToken:
+                    return ParseNumberLiteral();
+                case SyntaxKind.IdentifierToken:
+                default:
+                    return ParseNameExpression();
             }
+        }
+
+        private ExpressionSyntax ParseParenthesizedExpression()
+        {
+            var left = MatchToken(SyntaxKind.OpenParenthesisToken);
+            var expression = ParseExpression();
+            var right = MatchToken(SyntaxKind.CloseParenthesisToken);
+            return new ParenthesizedExpressionSyntax(left, expression, right);
+        }
+
+        private ExpressionSyntax ParseBooleanLiteral()
+        {
+            var isTrue = Current.Kind == SyntaxKind.TrueKeyword;
+            var keywordToken = isTrue ? MatchToken(SyntaxKind.TrueKeyword) : MatchToken(SyntaxKind.FalseKeyword);
+            return new LiteralExpressionSyntax(keywordToken, isTrue);
+        }
+
+        private ExpressionSyntax ParseNameExpression()
+        {
+            var identifierToken = MatchToken(SyntaxKind.IdentifierToken);
+            return new NameExpressionSyntax(identifierToken);
+        }
+        
+        private ExpressionSyntax ParseNumberLiteral()
+        {
+            var numberToken = MatchToken(SyntaxKind.NumberToken);
+            return new LiteralExpressionSyntax(numberToken);
         }
     }
 }

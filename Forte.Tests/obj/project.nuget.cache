@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "rRJ9CDeISGHJsrzYnZ6vOSZ2+GoD0LY4RXVWqi5fxRz4gU2IqY18s3lQu6fKEMvQKHqPZ+ms6XyL2PwMx3hIJQ==",
+  "dgSpecHash": "4UANbQiSFgo3aJc3wxxr77vbuIa9+cxYeGF0q47IqmwtTukrR84Z7P0RHJmXXGbS6U4FZ/OUSHkdxvGVHnjLcw==",
   "success": true,
   "projectFilePath": "C:\\Users\\troyc\\Documents\\GitHub\\compiler\\Forte.Tests\\Forte.Tests.csproj",
   "expectedPackageFiles": [
@@ -36,6 +36,7 @@
     "C:\\Users\\troyc\\.nuget\\packages\\system.buffers\\4.3.0\\system.buffers.4.3.0.nupkg.sha512",
     "C:\\Users\\troyc\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",
     "C:\\Users\\troyc\\.nuget\\packages\\system.collections.concurrent\\4.3.0\\system.collections.concurrent.4.3.0.nupkg.sha512",
+    "C:\\Users\\troyc\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
     "C:\\Users\\troyc\\.nuget\\packages\\system.console\\4.3.0\\system.console.4.3.0.nupkg.sha512",
     "C:\\Users\\troyc\\.nuget\\packages\\system.diagnostics.debug\\4.3.0\\system.diagnostics.debug.4.3.0.nupkg.sha512",
     "C:\\Users\\troyc\\.nuget\\packages\\system.diagnostics.diagnosticsource\\4.3.0\\system.diagnostics.diagnosticsource.4.3.0.nupkg.sha512",

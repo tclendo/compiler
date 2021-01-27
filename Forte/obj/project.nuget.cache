@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "a/WmKnQ/Tt7AI4FPYGFM8k5ZMhh06Hoj7jfxsWXP2DmmfCCKeUHo+A9DhgcpqV8NzVKvVcLNpQPvUD8lwtqyWw==",
+  "dgSpecHash": "eqrEt9LMVGTw0WdbmZQiB+lmLnVvIFF+NKu5q2vz/eYZGg5TMsQ2wRq2fik12/7lLE9NqCLYsT1Wq2VlnIjfdQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\troyc\\Documents\\GitHub\\compiler\\Forte\\fc.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\troyc\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

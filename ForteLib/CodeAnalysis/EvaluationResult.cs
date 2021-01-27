@@ -1,17 +1,18 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Forte.CodeAnalysis
 {
     public sealed class EvaluationResult {
 
-        public EvaluationResult(IEnumerable<Diagnostic> diagnostics, object value) {
+        public EvaluationResult(ImmutableArray<Diagnostic> diagnostics, object value) {
             
-            Diagnostics = diagnostics.ToArray();
+            Diagnostics = diagnostics;
             Value = value;
         }
 
-        public IEnumerable<Diagnostic> Diagnostics { get; }
+        public ImmutableArray<Diagnostic> Diagnostics { get; }
         public object Value { get; }
     }
 }

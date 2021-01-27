@@ -1,3 +1,5 @@
+using Forte.CodeAnalysis.Text;
+
 namespace Forte.CodeAnalysis
 {
     public sealed class Diagnostic {

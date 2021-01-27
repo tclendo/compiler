@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Forte.CodeAnalysis.Text;
 
 namespace Forte.CodeAnalysis.Syntax
 {
@@ -17,31 +18,23 @@ namespace Forte.CodeAnalysis.Syntax
         */
 
         private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
+        private readonly SourceText _text;
         private readonly ImmutableArray<SyntaxToken> _tokens;
 
         private int _position;
 
-        public Parser(string text)
+        public Parser(SourceText text)
         {
-
-            /*
-                Parser constructor
-
-                Initializes the list of _tokens and _diagnostics
-            */
 
             var tokens = new List<SyntaxToken>();
             var lexer = new Lexer(text);
 
             SyntaxToken token;
 
-            // go through the text until end of file token to create a list of tokens
             do {
 
-                // get the next token from our lexer
                 token = lexer.Lex();
 
-                // as long as the token is good, add it to our tokens list
                 if (token.Kind != SyntaxKind.WhitespaceToken &&
                     token.Kind != SyntaxKind.BadToken) {
 
@@ -49,10 +42,9 @@ namespace Forte.CodeAnalysis.Syntax
                     }
 
             } while (token.Kind != SyntaxKind.EndOfFileToken);
-
-            // copy our tokens array to our instance variable _tokens
+            
+            _text = text;
             _tokens = tokens.ToImmutableArray();
-            // add any diagnostics info to our diagnostics
             _diagnostics.AddRange(lexer.Diagnostics);
         }
 
@@ -133,7 +125,7 @@ namespace Forte.CodeAnalysis.Syntax
 
             var expression = ParseExpression();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(_diagnostics.ToImmutableArray(), expression, endOfFileToken);
+            return new SyntaxTree(_text, _diagnostics.ToImmutableArray(), expression, endOfFileToken);
         }
 
         private ExpressionSyntax ParseExpression()

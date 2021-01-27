@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Forte.CodeAnalysis.Text;
 
 namespace Forte.CodeAnalysis.Syntax
 {
@@ -13,7 +14,7 @@ namespace Forte.CodeAnalysis.Syntax
         */
         
         private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
-        private readonly string _text;
+        private readonly SourceText _text;
 
         private int _position;
         
@@ -21,15 +22,7 @@ namespace Forte.CodeAnalysis.Syntax
         private SyntaxKind _kind;
         private object _value;
 
-        public Lexer(string text) {
-            
-            /*
-                Our lexer constructor
-
-                sets the instance variable _text with our input text
-
-            */
-            
+        public Lexer(SourceText text) {
             _text = text;
         }
 
@@ -40,15 +33,6 @@ namespace Forte.CodeAnalysis.Syntax
         private char Lookahead => Peek(1);
 
         private char Peek(int offset) {
-
-            /*
-                Lexer.Peek
-
-                Peeks inside the input at a given offset
-
-                Current uses Peek(0) to get the current indexed character
-                Lookahead uses Peek(1) to get the next indexed character
-            */
 
             var index = _position + offset;
 
@@ -179,17 +163,12 @@ namespace Forte.CodeAnalysis.Syntax
                     break;
                     
                 default:
-                    // check if the current character is a white space
                     if (char.IsLetter(Current))
                     {
-                        // starting position of whitespace (in case multiple)
                         ReadIdentifierOrKeyword();
-                        // return a boolean token
                     } else if (char.IsWhiteSpace(Current))
                     {
-                        // starting position of whitespace (in case multiple)
                         ReadWhiteSpace();
-                        // return a whitespace token
                     }
 
                     // true and false
@@ -203,7 +182,7 @@ namespace Forte.CodeAnalysis.Syntax
             var length = _position - _start;
             var text = SyntaxFacts.GetText(_kind);
             if (text == null) {
-                text = _text.Substring(_start, length);
+                text = _text.ToString(_start, length);
             }
 
             return new SyntaxToken(_kind, _start, text, _value);
@@ -224,9 +203,8 @@ namespace Forte.CodeAnalysis.Syntax
                 _position++;
             }
 
-            // get the length of the whitespace block
             var length = _position - _start;
-            var text = _text.Substring(_start, length);
+            var text = _text.ToString(_start, length);
             _kind = SyntaxFacts.GetKeywordKind(text);
         }
 
@@ -236,15 +214,12 @@ namespace Forte.CodeAnalysis.Syntax
                 _position++;
             }
 
-            // at the end of the previous while loop, we should have the start and end digit
             var length = _position - _start;
-            var text = _text.Substring(_start, length);
+            var text = _text.ToString(_start, length);
 
-            // try to convert the string into an int, add errors if it can't be done
             if (!int.TryParse(text, out var value))
             {
-
-                _diagnostics.ReportInvalidNumber(new TextSpan(_start, length), _text, typeof(int));
+                _diagnostics.ReportInvalidNumber(new TextSpan(_start, length), text, typeof(int));
             }
             _value = value;
             _kind = SyntaxKind.NumberToken;

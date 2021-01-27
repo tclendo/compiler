@@ -1,6 +1,6 @@
 using System;
 
-namespace Forte.CodeAnalysis
+namespace Forte.CodeAnalysis.Text
 {
     public struct TextSpan
     {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Forte.CodeAnalysis.Text;
 
 namespace Forte.CodeAnalysis.Syntax
 {

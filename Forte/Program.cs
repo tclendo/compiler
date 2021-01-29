@@ -22,6 +22,7 @@ namespace Forte
             var showTree = false;
             var variables = new Dictionary<VariableSymbol, object>();
             var textBuilder = new StringBuilder();
+            Compilation previous = null;
             
             while (true) {
 
@@ -45,15 +46,19 @@ namespace Forte
                         break;
                     }
 
-                    if (input == "$showTree") {
+                    if (input == "#showTree") {
 
                         showTree = !showTree;
                         Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
                         continue;
                         
-                    } else if (input == "$cls") {
+                    } else if (input == "#cls") {
 
                         Console.Clear();
+                        continue;
+                    } else if (input == "#reset") {
+
+                        previous = null;
                         continue;
                     }
                 }
@@ -68,7 +73,10 @@ namespace Forte
                     continue;
                 }
 
-                var compilation = new Compilation(syntaxTree);
+                var compilation = previous == null
+                                    ? new Compilation(syntaxTree)
+                                    : previous.ContinueWith(syntaxTree);
+
                 var result = compilation.Evaluate(variables);
 
                 if (showTree) {
@@ -84,6 +92,7 @@ namespace Forte
                     Console.WriteLine(result.Value);
                     Console.ResetColor();
                     
+                    previous = compilation;
                 }
 
                 else {

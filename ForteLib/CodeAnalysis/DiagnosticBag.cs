@@ -61,5 +61,11 @@ namespace Forte.CodeAnalysis
             var message = $"Variable '{name}' doesn't exist.";
             Report(span, message);
         }
+
+        internal void ReportCannotConvert(TextSpan span, Type fromType, Type toType)
+        {
+            var message = $"Cannot convert type '{fromType}' to type '{toType}'";
+            Report(span, message);
+        }
     }
 }

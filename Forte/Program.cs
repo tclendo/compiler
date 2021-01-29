@@ -84,7 +84,7 @@ namespace Forte
 
                 else {
 
-                        foreach (var diagnostic in result.Diagnostics) {
+                    foreach (var diagnostic in result.Diagnostics) {
 
                         var lineIndex = syntaxTree.Text.GetLineIndex(diagnostic.Span.Start);
                         var line = syntaxTree.Text.Lines[lineIndex];

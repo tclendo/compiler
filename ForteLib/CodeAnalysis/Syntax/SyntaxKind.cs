@@ -30,6 +30,9 @@ namespace Forte.CodeAnalysis.Syntax
         FalseKeyword,           // "true"
         TrueKeyword,            // "false"
         
+        // Nodes
+        CompilationUnit,
+
         // Expressions
         LiteralExpression,  
         NameExpression,

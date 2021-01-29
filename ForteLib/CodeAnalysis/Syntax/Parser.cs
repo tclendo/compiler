@@ -19,6 +19,7 @@ namespace Forte.CodeAnalysis.Syntax
 
         private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
         private readonly SourceText _text;
+
         private readonly ImmutableArray<SyntaxToken> _tokens;
 
         private int _position;
@@ -108,7 +109,7 @@ namespace Forte.CodeAnalysis.Syntax
             return new SyntaxToken(kind, Current.Position, null, null);
         }
 
-        public SyntaxTree Parse()
+        public CompilationUnitSyntax ParseCompilationUnit()
         {
             
             /*
@@ -125,7 +126,7 @@ namespace Forte.CodeAnalysis.Syntax
 
             var expression = ParseExpression();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(_text, _diagnostics.ToImmutableArray(), expression, endOfFileToken);
+            return new CompilationUnitSyntax(expression, endOfFileToken);
         }
 
         private ExpressionSyntax ParseExpression()

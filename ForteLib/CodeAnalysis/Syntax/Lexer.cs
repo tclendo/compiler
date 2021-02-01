@@ -104,6 +104,17 @@ namespace Forte.CodeAnalysis.Syntax
                     _position++;
                     break;
 
+                case '{':
+                    _kind = SyntaxKind.OpenBraceToken;
+                    _position++;
+                    break;
+
+                // close parenthesis
+                case '}':
+                    _kind = SyntaxKind.CloseBraceToken;
+                    _position++;
+                    break;
+
                 // ampersand
                 case '&':
 

@@ -24,14 +24,23 @@ namespace Forte.CodeAnalysis.Syntax
         BangEqualsToken,        // "!="
         OpenParenthesisToken,   // "("
         CloseParenthesisToken,  // ")"
+        OpenBraceToken,
+        CloseBraceToken,
         IdentifierToken,        //
 
         // Keywords
         FalseKeyword,           // "true"
         TrueKeyword,            // "false"
-        
+        LetKeyword,
+        VarKeyword,
+                
         // Nodes
         CompilationUnit,
+
+        // Statements
+        BlockStatement,
+        VariableDeclaration,
+        ExpressionStatement,
 
         // Expressions
         LiteralExpression,  

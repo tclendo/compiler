@@ -29,7 +29,7 @@ namespace Forte.CodeAnalysis.Binding
         {
             var parentScope = CreateParentScopes(previous);
             var binder = new Binder(parentScope);
-            var expression = binder.BindExpression(syntax.Expression);
+            var expression = binder.BindStatement(syntax.Statement);
             var variables = binder._scope.GetDeclaredVariables();
             var diagnostics = binder.Diagnostics.ToImmutableArray();
 
@@ -66,11 +66,65 @@ namespace Forte.CodeAnalysis.Binding
 
         public DiagnosticBag Diagnostics => _diagnostics;
 
-        public BoundExpression BindExpression(ExpressionSyntax syntax) 
+        private BoundStatement BindStatement(StatementSyntax syntax) 
         {
 
             // Casts ExpressionSyntax to a certain Bound Expression based on what kind
             // of expression it is.
+
+            switch (syntax.Kind) 
+            {
+                // if it's a parenthesized expression, return a parenthesized expression
+                case SyntaxKind.BlockStatement:
+                    return BindBlockStatement((BlockStatementSyntax)syntax);                
+                case SyntaxKind.ExpressionStatement:
+                    return BindExpressionStatement((ExpressionStatementSyntax)syntax);
+                case SyntaxKind.VariableDeclaration:
+                    return BindVariableDeclaration((VariableDeclarationSyntax)syntax);   
+                // if it's some other kind of expression, throw an exception
+                default:
+                    throw new Exception($"Unexpected syntax{syntax.Kind}");
+            }
+        }
+
+        private BoundStatement BindVariableDeclaration(VariableDeclarationSyntax syntax)
+        {
+            var name = syntax.Identifier.Text;
+            var isReadOnly = syntax.Keyword.Kind == SyntaxKind.LetKeyword;
+            var initializer = BindExpression(syntax.Initializer);
+            var variable = new VariableSymbol(name, isReadOnly, initializer.Type);
+
+            if (!_scope.TryDeclare(variable))
+            {
+                _diagnostics.ReportVariableAlreadyDeclared(syntax.Identifier.Span, name);
+            }
+
+            return new BoundVariableDeclaration(variable, initializer);
+        }
+
+        private BoundStatement BindBlockStatement(BlockStatementSyntax syntax)
+        {
+            var statements = ImmutableArray.CreateBuilder<BoundStatement>();
+            _scope = new BoundScope(_scope);
+            foreach (var statementSyntax in syntax.Statements)
+            {
+                var statement = BindStatement(statementSyntax);
+                statements.Add(statement);
+            }
+
+            _scope = _scope.Parent;
+
+            return new BoundBlockStatement(statements.ToImmutable());
+        }
+
+        private BoundStatement BindExpressionStatement(ExpressionStatementSyntax syntax)
+        {
+            var expression = BindExpression(syntax.Expression);
+            return new BoundExpressionStatement(expression);
+        }
+
+        private BoundExpression BindExpression(ExpressionSyntax syntax) 
+        {
 
             switch (syntax.Kind) 
             {
@@ -95,6 +149,7 @@ namespace Forte.CodeAnalysis.Binding
                     throw new Exception($"Unexpected syntax{syntax.Kind}");
             }
         }
+
 
         private BoundExpression BindParenthesizedExpression(ParenthesizedExpressionSyntax syntax)
         {
@@ -133,8 +188,13 @@ namespace Forte.CodeAnalysis.Binding
 
             if (!_scope.TryLookup(name, out var variable))
             {
-                variable = new VariableSymbol(name, boundExpression.Type);
-                _scope.TryDeclare(variable);
+                _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
+                return boundExpression;
+            }
+
+            if (variable.IsReadOnly)
+            {
+                _diagnostics.ReportCannotAssign(syntax.EqualsToken.Span, name);
             }
 
             if (boundExpression.Type != variable.Type)

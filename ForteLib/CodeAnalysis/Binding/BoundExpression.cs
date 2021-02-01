@@ -6,4 +6,9 @@ namespace Forte.CodeAnalysis.Binding
 
         public abstract Type Type { get; }
     }
+
+    internal abstract class BoundStatement : BoundNode
+    {
+
+    }
 }

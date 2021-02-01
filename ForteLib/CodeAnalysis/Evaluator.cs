@@ -14,47 +14,53 @@ namespace Forte.CodeAnalysis
             given a root node of that parse tree. 
         */
 
-        public readonly BoundExpression _root;
+        private readonly BoundStatement _root;
         private readonly Dictionary<VariableSymbol, object> _variables;
 
-        public Evaluator(BoundExpression root, Dictionary<VariableSymbol, object> variables)
+        private object _lastValue;
+
+        public Evaluator(BoundStatement root, Dictionary<VariableSymbol, object> variables)
         {
-
-            /*
-                Constructor for our evaluator class
-                Initialize the root node.
-            */
-
             _root = root;
             _variables = variables;
         }
 
         public object Evaluate()
         {
+            EvaluateStatement(_root);
+            return _lastValue;
+        }
 
-            /*
-                Evaluate
+        private void EvaluateStatement(BoundStatement node)
+        {
+            switch (node.Kind)
+            {
+                case BoundNodeKind.BlockStatement:
+                    EvaluateBlockStatement((BoundBlockStatement)node);
+                    break;
+                case BoundNodeKind.ExpressionStatement:
+                    EvaluateExpressionStatement((BoundExpressionStatement)node);
+                    break;
+                default:
+                    throw new Exception($"Unexpected node {node.Kind}");
+            }
+        }
 
-                Evaluate the entire tree and return a value.
-            */
+        private void EvaluateBlockStatement(BoundBlockStatement node)
+        {
+            foreach(var statement in node.Statements)
+            {
+                EvaluateStatement(statement);
+            }
+        }
 
-            return EvaluateExpression(_root);
+        private void EvaluateExpressionStatement(BoundExpressionStatement node)
+        {
+            _lastValue = EvaluateExpression(node.Expression);
         }
 
         private object EvaluateExpression(BoundExpression node)
         {
-
-            /*
-                EvaluateExpression
-
-                Returns an integer by recursively operating on nodes of the parse tree.
-
-                LiteralExpressionSyntax
-                BinaryExpressionSyntax
-                ParenthesizedExpressionSyntax
-            */
-
-            // if the current node is just a number, return the integer value of it
             switch (node.Kind)
             {
                 case BoundNodeKind.LiteralExpression:
@@ -69,7 +75,6 @@ namespace Forte.CodeAnalysis
                     return EvaluateBinaryExpression((BoundBinaryExpression)node);
             }
 
-            // if all cases failed, throw an unexpected node exception
             throw new Exception($"Unexpected node {node.Kind}");
         }
 

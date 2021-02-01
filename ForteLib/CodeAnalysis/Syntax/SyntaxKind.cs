@@ -24,6 +24,8 @@ namespace Forte.CodeAnalysis.Syntax
         BangEqualsToken,        // "!="
         OpenParenthesisToken,   // "("
         CloseParenthesisToken,  // ")"
+        OpenBraceToken,
+        CloseBraceToken,
         IdentifierToken,        //
 
         // Keywords
@@ -32,6 +34,10 @@ namespace Forte.CodeAnalysis.Syntax
         
         // Nodes
         CompilationUnit,
+
+        // Statements
+        ExpressionStatement,
+        BlockStatement,
 
         // Expressions
         LiteralExpression,  

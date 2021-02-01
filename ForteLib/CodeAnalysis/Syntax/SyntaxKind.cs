@@ -31,13 +31,16 @@ namespace Forte.CodeAnalysis.Syntax
         // Keywords
         FalseKeyword,           // "true"
         TrueKeyword,            // "false"
-        
+        LetKeyword,
+        VarKeyword,
+                
         // Nodes
         CompilationUnit,
 
         // Statements
-        ExpressionStatement,
         BlockStatement,
+        VariableDeclaration,
+        ExpressionStatement,
 
         // Expressions
         LiteralExpression,  

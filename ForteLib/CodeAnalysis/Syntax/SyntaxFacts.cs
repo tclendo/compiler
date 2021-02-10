@@ -67,8 +67,12 @@ namespace Forte.CodeAnalysis.Syntax
         {
             switch(text) {
 
+                case ("else"):
+                    return SyntaxKind.ElseKeyword;
                 case ("true"):
                     return SyntaxKind.TrueKeyword;
+                case ("if"):
+                    return SyntaxKind.IfKeyword;
                 case ("false"):
                     return SyntaxKind.FalseKeyword;
                 case ("let"):
@@ -140,8 +144,12 @@ namespace Forte.CodeAnalysis.Syntax
                     return "{";
                 case (SyntaxKind.CloseBraceToken):
                     return "}";
+                case (SyntaxKind.ElseKeyword):
+                    return "else";
                 case (SyntaxKind.FalseKeyword):
                     return "false";
+                case (SyntaxKind.IfKeyword):
+                    return "if";
                 case (SyntaxKind.TrueKeyword):
                     return "true";
                 case (SyntaxKind.LetKeyword):

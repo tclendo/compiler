@@ -33,17 +33,21 @@ namespace Forte.CodeAnalysis.Syntax
         GreaterOrEqualsToken,
 
         // Keywords
+        ElseKeyword,
         FalseKeyword,           // "true"
+        IfKeyword,
         TrueKeyword,            // "false"
         LetKeyword,
         VarKeyword,
                 
         // Nodes
         CompilationUnit,
+        ElseClause,
 
         // Statements
         BlockStatement,
         VariableDeclaration,
+        ifStatement,
         ExpressionStatement,
 
         // Expressions

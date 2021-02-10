@@ -27,6 +27,10 @@ namespace Forte.CodeAnalysis.Syntax
         OpenBraceToken,
         CloseBraceToken,
         IdentifierToken,        //
+        LessToken,
+        LessOrEqualsToken,
+        GreaterToken,
+        GreaterOrEqualsToken,
 
         // Keywords
         FalseKeyword,           // "true"

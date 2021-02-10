@@ -17,10 +17,18 @@ namespace Forte.Tests.CodeAnalysis
         [InlineData("4 * 2", 8)]
         [InlineData("9 / 3", 3)]
         [InlineData("(10)", 10)]
+
         [InlineData("12 == 3", false)]
         [InlineData("3 == 3", true)]        
         [InlineData("12 != 3", true)]
         [InlineData("3 != 3", false)]
+        
+        [InlineData("3 < 4", true)]
+        [InlineData("5 <= 4", false)]
+        [InlineData("5 > 4", true)]
+        [InlineData("3 >= 4", false)]
+        [InlineData("4 >= 4", true)]
+        [InlineData("5 <= 5", true)]
         [InlineData("true == true", true)]
         [InlineData("false != false", false)]
         [InlineData("true == false", false)]
@@ -31,7 +39,6 @@ namespace Forte.Tests.CodeAnalysis
         [InlineData("!true", false)]
         [InlineData("!false", true)]        
         [InlineData("{var a = 0 (a = 10) * a }", 100)]
-     
         public void Evaluator_Computes_CorrectValues(string text, object expectedValue)
         {
             AssertValue(text, expectedValue);

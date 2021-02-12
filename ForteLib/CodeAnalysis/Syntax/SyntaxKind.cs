@@ -27,19 +27,32 @@ namespace Forte.CodeAnalysis.Syntax
         OpenBraceToken,
         CloseBraceToken,
         IdentifierToken,        //
+        LessToken,
+        LessOrEqualsToken,
+        GreaterToken,
+        GreaterOrEqualsToken,
 
         // Keywords
+        ElseKeyword,
         FalseKeyword,           // "true"
+        ForKeyword,
+        IfKeyword,
         TrueKeyword,            // "false"
         LetKeyword,
+        ToKeyword,
         VarKeyword,
+        WhileKeyword,
                 
         // Nodes
         CompilationUnit,
+        ElseClause,
 
         // Statements
         BlockStatement,
         VariableDeclaration,
+        ifStatement,
+        WhileStatement,
+        ForStatement,
         ExpressionStatement,
 
         // Expressions

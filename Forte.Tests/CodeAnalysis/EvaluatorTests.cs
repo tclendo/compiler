@@ -17,10 +17,18 @@ namespace Forte.Tests.CodeAnalysis
         [InlineData("4 * 2", 8)]
         [InlineData("9 / 3", 3)]
         [InlineData("(10)", 10)]
+
         [InlineData("12 == 3", false)]
         [InlineData("3 == 3", true)]        
         [InlineData("12 != 3", true)]
         [InlineData("3 != 3", false)]
+        
+        [InlineData("3 < 4", true)]
+        [InlineData("5 <= 4", false)]
+        [InlineData("5 > 4", true)]
+        [InlineData("3 >= 4", false)]
+        [InlineData("4 >= 4", true)]
+        [InlineData("5 <= 5", true)]
         [InlineData("true == true", true)]
         [InlineData("false != false", false)]
         [InlineData("true == false", false)]
@@ -31,7 +39,12 @@ namespace Forte.Tests.CodeAnalysis
         [InlineData("!true", false)]
         [InlineData("!false", true)]        
         [InlineData("{var a = 0 (a = 10) * a }", 100)]
-     
+        [InlineData("{var a = 0 if a == 0 a = 10 a}", 10)]
+        [InlineData("{var a = 0 if a == 4 a = 10 a}", 0)]
+        [InlineData("{var a = 0 if a == 0 a = 10 else a = 5 a}", 10)]
+        [InlineData("{var a = 0 if a == 4 a = 10 else a = 5 a}", 5)]
+        [InlineData("{var i = 10 var result = 0 while i > 0 {result = result + i i = i - 1} result }", 55)]
+        [InlineData("{var result = 0 for i = 1 to 10 {result = result + i} result }", 55)]
         public void Evaluator_Computes_CorrectValues(string text, object expectedValue)
         {
             AssertValue(text, expectedValue);
@@ -59,7 +72,95 @@ namespace Forte.Tests.CodeAnalysis
         }
 
         [Fact]
-        public void Evaluator_Name_Reports_Undefined()
+        public void Evaluator_BlockStatement_NoInfiniteLoop()
+        {
+            var text = @"
+                {
+                [)][]
+            ";
+
+            var diagnostics = @"
+                Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
+                Unexpected token <EndOfFileToken>, expected <CloseBraceToken>.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_IfStatement_Reports_CannotConvert()
+        {
+            var text = @"
+                {
+                    var x = 0
+                    if [10]
+                        x = 10
+                }
+            ";
+
+            var diagnostics = @"
+                Cannot convert type 'System.Int32' to type 'System.Boolean'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_WhileStatement_Reports_CannotConvert()
+        {
+            var text = @"
+                {
+                    var x = 0
+                    while [10]
+                        x = 10
+                }
+            ";
+
+            var diagnostics = @"
+                Cannot convert type 'System.Int32' to type 'System.Boolean'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_ForStatement_Reports_CannotConvert_LowerBound()
+        {
+            var text = @"
+                {
+                    var result = 0
+                    for i = [false] to 10
+                        result = result + i
+                }
+            ";
+
+            var diagnostics = @"
+                Cannot convert type 'System.Boolean' to type 'System.Int32'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_ForStatement_Reports_CannotConvert_UpperBound()
+        {
+            var text = @"
+                {
+                    var result = 0
+                    for i = 1 to [true]
+                        result = result + i
+                }
+            ";
+
+            var diagnostics = @"
+                Cannot convert type 'System.Boolean' to type 'System.Int32'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_NameExpression_Reports_Undefined()
         {
             var text = @"[x] * 10";
 
@@ -70,8 +171,19 @@ namespace Forte.Tests.CodeAnalysis
             AssertDiagnostics(text, diagnostics);
         }
 
+        public void Evaluator_NameExpression_Reports_NoErrorForInsertedToken()
+        {
+            var text = @"[]";
+
+            var diagnostics = @"
+                Unexpected token <EndOfFileToken>, expected <IdentifierToken>.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
         [Fact]
-        public void Evaluator_Assigned_Reports_CannotAssign()
+        public void Evaluator_AssignmentExpression_Reports_CannotAssign()
         {
             var text = @"
                 {
@@ -88,7 +200,7 @@ namespace Forte.Tests.CodeAnalysis
         }
 
         [Fact]
-        public void Evaluator_Assigned_Reports_CannotConvert()
+        public void Evaluator_AssignmentExpression_Reports_CannotConvert()
         {
             var text = @"
                 {
@@ -105,7 +217,7 @@ namespace Forte.Tests.CodeAnalysis
         }
 
         [Fact]
-        public void Evaluator_Unary_Reports_Undefined()
+        public void Evaluator_UnaryExpression_Reports_Undefined()
         {
             var text = @"[+]true";
 
@@ -117,7 +229,7 @@ namespace Forte.Tests.CodeAnalysis
         }
 
         [Fact]
-        public void Evaluator_Binary_Reports_Undefined()
+        public void Evaluator_BinaryExpression_Reports_Undefined()
         {
             var text = @"10 [*] true";
 

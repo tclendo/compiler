@@ -46,6 +46,10 @@ namespace Forte.CodeAnalysis.Syntax
                 
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.BangEqualsToken:
+                case SyntaxKind.LessToken:
+                case SyntaxKind.LessOrEqualsToken:
+                case SyntaxKind.GreaterToken:
+                case SyntaxKind.GreaterOrEqualsToken:
                     return 3;
 
                 case SyntaxKind.AmpersandAmpersandToken:
@@ -63,14 +67,24 @@ namespace Forte.CodeAnalysis.Syntax
         {
             switch(text) {
 
+                case ("else"):
+                    return SyntaxKind.ElseKeyword;
                 case ("true"):
                     return SyntaxKind.TrueKeyword;
+                case ("for"):
+                    return SyntaxKind.ForKeyword;
+                case ("if"):
+                    return SyntaxKind.IfKeyword;
                 case ("false"):
                     return SyntaxKind.FalseKeyword;
                 case ("let"):
                     return SyntaxKind.LetKeyword;
+                case ("to"):
+                    return SyntaxKind.ToKeyword;
                 case ("var"):
-                    return SyntaxKind.VarKeyword;                    
+                    return SyntaxKind.VarKeyword;
+                case ("while"):
+                    return SyntaxKind.WhileKeyword;                  
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -120,6 +134,14 @@ namespace Forte.CodeAnalysis.Syntax
                     return "==";
                 case (SyntaxKind.BangEqualsToken):
                     return "!=";
+                case (SyntaxKind.LessToken):
+                    return "<";
+                case (SyntaxKind.LessOrEqualsToken):
+                    return "<=";
+                case (SyntaxKind.GreaterToken):
+                    return ">";
+                case (SyntaxKind.GreaterOrEqualsToken):
+                    return ">=";
                 case (SyntaxKind.OpenParenthesisToken):
                     return "(";
                 case (SyntaxKind.CloseParenthesisToken):
@@ -128,14 +150,24 @@ namespace Forte.CodeAnalysis.Syntax
                     return "{";
                 case (SyntaxKind.CloseBraceToken):
                     return "}";
+                case (SyntaxKind.ElseKeyword):
+                    return "else";
                 case (SyntaxKind.FalseKeyword):
                     return "false";
+                case (SyntaxKind.ForKeyword):
+                    return "for";
+                case (SyntaxKind.IfKeyword):
+                    return "if";
                 case (SyntaxKind.TrueKeyword):
                     return "true";
                 case (SyntaxKind.LetKeyword):
                     return "let";
+                case (SyntaxKind.ToKeyword):
+                    return "to";
                 case (SyntaxKind.VarKeyword):
                     return "var";
+                case (SyntaxKind.WhileKeyword):
+                    return "while";
                 default:
                     return null;
             }

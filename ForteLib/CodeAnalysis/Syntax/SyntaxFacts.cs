@@ -71,12 +71,16 @@ namespace Forte.CodeAnalysis.Syntax
                     return SyntaxKind.ElseKeyword;
                 case ("true"):
                     return SyntaxKind.TrueKeyword;
+                case ("for"):
+                    return SyntaxKind.ForKeyword;
                 case ("if"):
                     return SyntaxKind.IfKeyword;
                 case ("false"):
                     return SyntaxKind.FalseKeyword;
                 case ("let"):
                     return SyntaxKind.LetKeyword;
+                case ("to"):
+                    return SyntaxKind.ToKeyword;
                 case ("var"):
                     return SyntaxKind.VarKeyword;
                 case ("while"):
@@ -150,12 +154,16 @@ namespace Forte.CodeAnalysis.Syntax
                     return "else";
                 case (SyntaxKind.FalseKeyword):
                     return "false";
+                case (SyntaxKind.ForKeyword):
+                    return "for";
                 case (SyntaxKind.IfKeyword):
                     return "if";
                 case (SyntaxKind.TrueKeyword):
                     return "true";
                 case (SyntaxKind.LetKeyword):
                     return "let";
+                case (SyntaxKind.ToKeyword):
+                    return "to";
                 case (SyntaxKind.VarKeyword):
                     return "var";
                 case (SyntaxKind.WhileKeyword):

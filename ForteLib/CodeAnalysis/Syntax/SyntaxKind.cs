@@ -35,9 +35,11 @@ namespace Forte.CodeAnalysis.Syntax
         // Keywords
         ElseKeyword,
         FalseKeyword,           // "true"
+        ForKeyword,
         IfKeyword,
         TrueKeyword,            // "false"
         LetKeyword,
+        ToKeyword,
         VarKeyword,
         WhileKeyword,
                 
@@ -50,6 +52,7 @@ namespace Forte.CodeAnalysis.Syntax
         VariableDeclaration,
         ifStatement,
         WhileStatement,
+        ForStatement,
         ExpressionStatement,
 
         // Expressions

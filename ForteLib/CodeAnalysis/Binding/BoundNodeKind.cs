@@ -7,6 +7,7 @@ namespace Forte.CodeAnalysis.Binding
         ExpressionStatement,
         IfStatement,
         WhileStatement,
+        ForStatement,
         VariableDeclaration,
         
         // expressions

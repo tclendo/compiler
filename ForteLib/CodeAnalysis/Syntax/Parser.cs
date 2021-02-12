@@ -195,8 +195,22 @@ namespace Forte.CodeAnalysis.Syntax
             while (Current.Kind != SyntaxKind.EndOfFileToken
                     && Current.Kind != SyntaxKind.CloseBraceToken)
             {
+                var startToken = Current;
+
                 var statement = ParseStatement();
                 statements.Add(statement);
+
+                // If ParseStatement() did not consume any tokens,
+                // skip the current token and continue. This is to 
+                // prevent an infinite loop in our parsing.
+                //
+                // We do not need to report an error, because we
+                // already tried to parse an expression statement.
+                // and reported one.
+                if (Current == startToken)
+                {
+                    NextToken();
+                }
             }
 
             var closeBraceToken = MatchToken(SyntaxKind.CloseBraceToken);

@@ -72,46 +72,16 @@ namespace Forte.Tests.CodeAnalysis
         }
 
         [Fact]
-        public void Evaluator_Name_Reports_Undefined()
-        {
-            var text = @"[x] * 10";
-
-            var diagnostics = @"
-                Variable 'x' doesn't exist.
-            ";
-
-            AssertDiagnostics(text, diagnostics);
-        }
-
-        [Fact]
-        public void Evaluator_Assigned_Reports_CannotAssign()
+        public void Evaluator_BlockStatement_NoInfiniteLoop()
         {
             var text = @"
                 {
-                    let x = 10
-                    x [=] 0
-                }
+                [)][]
             ";
 
             var diagnostics = @"
-                Variable 'x' is readonly and cannot be assigned to.
-            ";
-
-            AssertDiagnostics(text, diagnostics);
-        }
-
-        [Fact]
-        public void Evaluator_Assigned_Reports_CannotConvert()
-        {
-            var text = @"
-                {
-                    var x = 10
-                    x = [true]
-                }
-            ";
-
-            var diagnostics = @"
-                Cannot convert type 'System.Boolean' to type 'System.Int32'.
+                Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
+                Unexpected token <EndOfFileToken>, expected <CloseBraceToken>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -190,7 +160,64 @@ namespace Forte.Tests.CodeAnalysis
         }
 
         [Fact]
-        public void Evaluator_Unary_Reports_Undefined()
+        public void Evaluator_NameExpression_Reports_Undefined()
+        {
+            var text = @"[x] * 10";
+
+            var diagnostics = @"
+                Variable 'x' doesn't exist.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        public void Evaluator_NameExpression_Reports_NoErrorForInsertedToken()
+        {
+            var text = @"[]";
+
+            var diagnostics = @"
+                Unexpected token <EndOfFileToken>, expected <IdentifierToken>.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_AssignmentExpression_Reports_CannotAssign()
+        {
+            var text = @"
+                {
+                    let x = 10
+                    x [=] 0
+                }
+            ";
+
+            var diagnostics = @"
+                Variable 'x' is readonly and cannot be assigned to.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_AssignmentExpression_Reports_CannotConvert()
+        {
+            var text = @"
+                {
+                    var x = 10
+                    x = [true]
+                }
+            ";
+
+            var diagnostics = @"
+                Cannot convert type 'System.Boolean' to type 'System.Int32'.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_UnaryExpression_Reports_Undefined()
         {
             var text = @"[+]true";
 
@@ -202,7 +229,7 @@ namespace Forte.Tests.CodeAnalysis
         }
 
         [Fact]
-        public void Evaluator_Binary_Reports_Undefined()
+        public void Evaluator_BinaryExpression_Reports_Undefined()
         {
             var text = @"10 [*] true";
 

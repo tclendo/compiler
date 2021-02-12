@@ -78,7 +78,9 @@ namespace Forte.CodeAnalysis.Syntax
                 case ("let"):
                     return SyntaxKind.LetKeyword;
                 case ("var"):
-                    return SyntaxKind.VarKeyword;                    
+                    return SyntaxKind.VarKeyword;
+                case ("while"):
+                    return SyntaxKind.WhileKeyword;                  
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -156,6 +158,8 @@ namespace Forte.CodeAnalysis.Syntax
                     return "let";
                 case (SyntaxKind.VarKeyword):
                     return "var";
+                case (SyntaxKind.WhileKeyword):
+                    return "while";
                 default:
                     return null;
             }

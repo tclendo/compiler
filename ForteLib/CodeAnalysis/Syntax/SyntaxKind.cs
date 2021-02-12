@@ -39,6 +39,7 @@ namespace Forte.CodeAnalysis.Syntax
         TrueKeyword,            // "false"
         LetKeyword,
         VarKeyword,
+        WhileKeyword,
                 
         // Nodes
         CompilationUnit,
@@ -48,6 +49,7 @@ namespace Forte.CodeAnalysis.Syntax
         BlockStatement,
         VariableDeclaration,
         ifStatement,
+        WhileStatement,
         ExpressionStatement,
 
         // Expressions

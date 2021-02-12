@@ -6,6 +6,7 @@ namespace Forte.CodeAnalysis.Binding
         BlockStatement,
         ExpressionStatement,
         IfStatement,
+        WhileStatement,
         VariableDeclaration,
         
         // expressions

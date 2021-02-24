@@ -115,14 +115,28 @@ namespace Forte.CodeAnalysis.Syntax
                     _position++;
                     break;
 
+                case '~':
+                    _kind = SyntaxKind.TildeToken;
+                    _position++;
+                    break;
+
+                case '^':
+                    _kind = SyntaxKind.HatToken;
+                    _position++;
+                    break;
+
                 // ampersand
                 case '&':
 
                     // logical and
-                    if (Lookahead == '&') {
+                    _position++;
+                    // is equal to
+                    if (Current != '&') {
+                        _kind = SyntaxKind.AmpersandToken;
+
+                    } else {
                         _kind = SyntaxKind.AmpersandAmpersandToken;
-                        _position += 2;
-                        break;
+                        _position++;
                     }
                     break;
 
@@ -130,10 +144,14 @@ namespace Forte.CodeAnalysis.Syntax
                 case '|':
 
                     // logical or
-                    if (Lookahead == '|') {
+                    _position++;
+                    // is equal to
+                    if (Current != '|') {
+                        _kind = SyntaxKind.PipeToken;
+
+                    } else {
                         _kind = SyntaxKind.PipePipeToken;
-                        _position += 2;
-                        break;
+                        _position++;
                     }
                     break;
 

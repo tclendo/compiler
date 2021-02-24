@@ -18,8 +18,12 @@ namespace Forte.CodeAnalysis.Syntax
         SlashToken,             // "/"
         BangToken,              // "!"
         EqualsToken,            // "="
+        TildeToken,
+        AmpersandToken,
         AmpersandAmpersandToken,// "&"
+        PipeToken,
         PipePipeToken,          // "|"
+        HatToken,
         EqualsEqualsToken,      // "=="
         BangEqualsToken,        // "!="
         OpenParenthesisToken,   // "("

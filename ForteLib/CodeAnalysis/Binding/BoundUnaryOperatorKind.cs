@@ -5,6 +5,7 @@ namespace Forte.CodeAnalysis.Binding
         // List of possible unary operator kinds
         Identity,
         Negation,
-        LogicalNegation
+        LogicalNegation,
+        OnesCompliment
     }
 }
